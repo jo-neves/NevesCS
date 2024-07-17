@@ -33,15 +33,5 @@ namespace NevesCS.Static.Utils
 
             return factoryFunction();
         }
-
-        public static T? OrIfNull<T>(T? target, T defaultValue)
-        {
-            if (!ObjectUtils.IsNull(target))
-            {
-                return target;
-            }
-
-            return defaultValue;
-        }
     }
 }

@@ -4,19 +4,14 @@ namespace NevesCS.Static.Extensions
 {
     public static class DecimalExtensions
     {
-        public static long EncodeAsLong(this decimal source)
-        {
-            return NumericalConversionUtils.EncodeDecimalAsLong(source);
-        }
-
         /// <summary>
         /// Returns a percentage of the original number.
         /// E.g.: 150.SubtractPercentage(20) == 30
         ///
         /// </summary>
-        public static decimal SubtractPercentage(this decimal total, decimal percentage)
+        public static decimal SubtractPercentage(this decimal part, decimal total)
         {
-            return CalculationUtils.SubtractPercentage(total, percentage);
+            return CalculationUtils.SubtractPercentage(part, total);
         }
 
         /// <summary>
@@ -24,9 +19,9 @@ namespace NevesCS.Static.Extensions
         /// E.g.: 150.SubtractFractionalPercentage(0.20) == 30
         ///
         /// </summary>
-        public static decimal SubtractFractionalPercentage(this decimal total, decimal fractionalPercentage)
+        public static decimal SubtractFractionalPercentage(this decimal part, decimal total)
         {
-            return CalculationUtils.SubtractFractionalPercentage(total, fractionalPercentage);
+            return CalculationUtils.SubtractFractionalPercentage(part, total);
         }
 
         /// <summary>
@@ -34,9 +29,9 @@ namespace NevesCS.Static.Extensions
         /// E.g.: 10.PercentageOfTotal(100) == 10
         ///
         /// </summary>
-        public static decimal PercentageOfTotal(this decimal part, decimal percentage)
+        public static decimal PercentageOfTotal(this decimal part, decimal total)
         {
-            return CalculationUtils.PercentageOfTotal(part, percentage);
+            return CalculationUtils.PercentageOfTotal(part, total);
         }
 
         /// <summary>
@@ -44,9 +39,9 @@ namespace NevesCS.Static.Extensions
         /// E.g.: 10.FractionalPercentageOfTotal(100) == 0.10
         ///
         /// </summary>
-        public static decimal FractionalPercentageOfTotal(this decimal part, decimal percentage)
+        public static decimal FractionalPercentageOfTotal(this decimal part, decimal total)
         {
-            return CalculationUtils.FractionalPercentageOfTotal(part, percentage);
+            return CalculationUtils.FractionalPercentageOfTotal(part, total);
         }
     }
 }

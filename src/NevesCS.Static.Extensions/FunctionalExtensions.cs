@@ -14,31 +14,14 @@ namespace NevesCS.Static.Extensions
             return FunctionalUtils.Set(target, setter);
         }
 
-        /// <summary>
-        /// Executes <paramref name="setter"/>, if <paramref name="target"/> is not <typeparamref name="null"/>.
-        ///
-        /// </summary>
         public static T? SetIfNotNull<T>(this T? target, Action<T> setter)
         {
             return FunctionalUtils.SetIfNotNull(target, setter);
         }
 
-        /// <summary>
-        /// Returns <paramref name="target"/>, or executes <paramref name="factoryFunction"/> if <typeparamref name="null"/>.
-        ///
-        /// </summary>
         public static T? OrIfNull<T>(this T? target, Func<T> factoryFunction)
         {
             return FunctionalUtils.OrIfNull(target, factoryFunction);
-        }
-
-        /// <summary>
-        /// Returns <paramref name="target"/>, or <paramref name="defaultValue"/> if <typeparamref name="null"/>.
-        ///
-        /// </summary>
-        public static T? OrIfNull<T>(this T? target, T defaultValue)
-        {
-            return FunctionalUtils.OrIfNull(target, defaultValue);
         }
     }
 }
