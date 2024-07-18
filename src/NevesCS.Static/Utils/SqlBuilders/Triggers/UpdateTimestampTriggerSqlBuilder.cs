@@ -24,7 +24,8 @@ namespace NevesCS.Static.Utils.SqlBuilders.Triggers
         public static string Drop(
             DatabaseVendorName databaseVendor,
             string tableName,
-            string columnName)
+            string columnName,
+            string fkName)
         {
             return databaseVendor switch
             {
@@ -43,16 +44,16 @@ namespace NevesCS.Static.Utils.SqlBuilders.Triggers
 
         public static string SqlLiteCreate(string tableName, string columnName, string fkName)
         {
-            return $"""
+            return @$"
                 CREATE TRIGGER {SqlLiteTriggerName(tableName, columnName)}
-                AFTER UPDATE ON "{tableName}"
+                AFTER UPDATE ON {tableName}
                 FOR EACH ROW
                 BEGIN
-                    UPDATE "{tableName}"
+                    UPDATE {tableName}
                     SET {columnName} = {SqlCurrentDatetimeFunction.Sqlite}
                     WHERE {fkName} = NEW.{fkName};
                 END;
-                """;
+            ";
         }
 
         public static string SqlLiteDrop(string tableName, string columnName)
@@ -67,16 +68,16 @@ namespace NevesCS.Static.Utils.SqlBuilders.Triggers
 
         public static string MySqlCreate(string tableName, string columnName, string fkName)
         {
-            return $"""
+            return @$"
                 CREATE TRIGGER {MySqlTriggerName(tableName, columnName)}
-                AFTER UPDATE ON `{tableName}`
+                AFTER UPDATE ON {tableName}
                 FOR EACH ROW
                 BEGIN
-                    UPDATE `{tableName}`
+                    UPDATE {tableName}
                     SET {columnName} = {SqlCurrentDatetimeFunction.MySQL}
                     WHERE {fkName} = NEW.{fkName};
                 END;
-                """;
+            ";
         }
 
         public static string MySqlDrop(string tableName, string columnName)
@@ -91,7 +92,7 @@ namespace NevesCS.Static.Utils.SqlBuilders.Triggers
 
         public static string PostgreSqlCreate(string tableName, string columnName, string fkName)
         {
-            return $"""
+            return @$"
                 -- Function called by the trigger.
                 CREATE OR REPLACE FUNCTION update_column_with_now(column_name text, fk_name text)
                 RETURNS TRIGGER AS $$
@@ -104,10 +105,10 @@ namespace NevesCS.Static.Utils.SqlBuilders.Triggers
                 $$ LANGUAGE plpgsql;
 
                 CREATE TRIGGER {MySqlTriggerName(tableName, columnName)}
-                AFTER UPDATE ON "{tableName}"
+                AFTER UPDATE ON ""{tableName}""
                 FOR EACH ROW
                 EXECUTE FUNCTION update_column_with_now('{columnName}', '{fkName}');
-                """;
+            ";
         }
 
         public static string PostgreSqlDrop(string tableName, string columnName)
