@@ -24,8 +24,7 @@ namespace NevesCS.Static.Utils.SqlBuilders.Triggers
         public static string Drop(
             DatabaseVendorName databaseVendor,
             string tableName,
-            string columnName,
-            string fkName)
+            string columnName)
         {
             return databaseVendor switch
             {
@@ -46,10 +45,10 @@ namespace NevesCS.Static.Utils.SqlBuilders.Triggers
         {
             return @$"
                 CREATE TRIGGER {SqlLiteTriggerName(tableName, columnName)}
-                AFTER UPDATE ON {tableName}
+                AFTER UPDATE ON ""{tableName}""
                 FOR EACH ROW
                 BEGIN
-                    UPDATE {tableName}
+                    UPDATE ""{tableName}""
                     SET {columnName} = {SqlCurrentDatetimeFunction.Sqlite}
                     WHERE {fkName} = NEW.{fkName};
                 END;
@@ -70,10 +69,10 @@ namespace NevesCS.Static.Utils.SqlBuilders.Triggers
         {
             return @$"
                 CREATE TRIGGER {MySqlTriggerName(tableName, columnName)}
-                AFTER UPDATE ON {tableName}
+                AFTER UPDATE ON `{tableName}`
                 FOR EACH ROW
                 BEGIN
-                    UPDATE {tableName}
+                    UPDATE `{tableName}`
                     SET {columnName} = {SqlCurrentDatetimeFunction.MySQL}
                     WHERE {fkName} = NEW.{fkName};
                 END;

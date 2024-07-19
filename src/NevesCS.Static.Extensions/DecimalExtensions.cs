@@ -4,6 +4,11 @@ namespace NevesCS.Static.Extensions
 {
     public static class DecimalExtensions
     {
+        public static long EncodeAsLong(this decimal source)
+        {
+            return NumericalConversionUtils.EncodeDecimalAsLong(source);
+        }
+
         /// <summary>
         /// Returns a percentage of the original number.
         /// E.g.: 150.SubtractPercentage(20) == 30
