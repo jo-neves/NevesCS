@@ -20,10 +20,5 @@ namespace NevesCS.NonStatic.Clients
         public required readonly TimeSpan MaxLifetime { get; init; }
 
         public readonly TimeSpan CheckExpiredCacheItemsEvery { get; init; } = TimeSpan.Zero;
-
-        public static CachedFactoryOptions NewMaxLifetime()
-        {
-            return new CachedFactoryOptions(TimeSpan.MaxValue);
-        }
     }
 }

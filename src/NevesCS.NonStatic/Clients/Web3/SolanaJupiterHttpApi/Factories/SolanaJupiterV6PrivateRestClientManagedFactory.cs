@@ -1,3 +1,4 @@
+using NevesCS.Abstractions.Clients.Web3.SolanaJupiterHttpApi;
 using NevesCS.Abstractions.Interfaces;
 using NevesCS.Abstractions.Services;
 using NevesCS.NonStatic.Patterns;
@@ -8,8 +9,8 @@ using Solnet.Wallet;
 
 namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
 {
-    public sealed class SolanaJupiterV6PrivateRestClientCachedFactory
-        : ICachedServiceFactory<SolanaJupiterV6PrivateRestClient>
+    public sealed class SolanaJupiterV6PrivateRestClientManagedFactory
+        : IManagedServiceFactory<ISolanaJupiterV6PrivateClient>
     {
         private readonly Wallet Wallet;
 
@@ -19,7 +20,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
 
         private readonly IJsonParser JsonParser;
 
-        public SolanaJupiterV6PrivateRestClientCachedFactory(
+        public SolanaJupiterV6PrivateRestClientManagedFactory(
             Wallet wallet,
             ICachedServiceFactory<HttpClient> httpClientCachedFactory,
             ICachedServiceFactory<IRpcClient> cachedRpcClientFactory,
@@ -31,7 +32,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
             JsonParser = ObjectUtils.ThrowIfNull(jsonParser, nameof(jsonParser));
         }
 
-        public SolanaJupiterV6PrivateRestClient Create(string key)
+        public ISolanaJupiterV6PrivateClient Create(string key)
         {
             return new SolanaJupiterV6PrivateRestClient(
                 Wallet,
@@ -40,7 +41,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
                 JsonParser);
         }
 
-        public static CachedServiceFactoryManager<SolanaJupiterV6PrivateRestClient> CreateNewManager(
+        public static ICachedServiceFactory<ISolanaJupiterV6PrivateClient> CreateNewManager(
             CachedFactoryOptions options,
             Wallet wallet,
             ICachedServiceFactory<HttpClient> httpClientCachedFactory,
@@ -48,9 +49,9 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
             IJsonParser jsonParser,
             CancellationToken cancellationToken = default)
         {
-            return new CachedServiceFactoryManager<SolanaJupiterV6PrivateRestClient>(
+            return new CachedServiceFactoryManager<ISolanaJupiterV6PrivateClient>(
                 options,
-                new SolanaJupiterV6PrivateRestClientCachedFactory(
+                new SolanaJupiterV6PrivateRestClientManagedFactory(
                     wallet,
                     httpClientCachedFactory,
                     rpcClientCachedFactory,

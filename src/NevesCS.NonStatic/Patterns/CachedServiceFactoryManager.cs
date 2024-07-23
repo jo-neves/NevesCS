@@ -8,9 +8,8 @@ using System.Diagnostics.CodeAnalysis;
 namespace NevesCS.NonStatic.Patterns
 {
     /// <summary>
-    /// This is to be used only in cases where the lifetimes of objects need to be optimized,
-    /// like on environments where DI is not used for performance reasons.
-    /// Otherwise, object creation should be manged through a DI solution.
+    /// This is to be used only in cases where the lifetimes of objects needs to be optimized.
+    /// Otherwise, the creation should be manged through DI.
     ///
     /// </summary>
     public sealed class CachedServiceFactoryManager<TService> : ICachedServiceFactory<TService>, IDisposable
@@ -20,7 +19,7 @@ namespace NevesCS.NonStatic.Patterns
         private readonly CancellationTokenSource InternalCancellationTokenSource;
         private readonly CancellationToken CancellationToken;
 
-        private readonly ICachedServiceFactory<TService> ServiceFactory;
+        private readonly IManagedServiceFactory<TService> ServiceFactory;
 
         private readonly ConcurrentDictionary<string, CacheItem> CachedItems = [];
 
@@ -28,7 +27,7 @@ namespace NevesCS.NonStatic.Patterns
 
         public CachedServiceFactoryManager(
             CachedFactoryOptions options,
-            ICachedServiceFactory<TService> serviceFactory,
+            IManagedServiceFactory<TService> serviceFactory,
             CancellationToken cancellationToken = default)
         {
             Options = ObjectUtils.ThrowIfNull(options, nameof(options));
@@ -63,6 +62,11 @@ namespace NevesCS.NonStatic.Patterns
                 while (!CancellationToken.IsCancellationRequested)
                 {
                     await Task.Delay(Options.CheckExpiredCacheItemsEvery, CancellationToken);
+
+                    if (CancellationToken.IsCancellationRequested)
+                    {
+                        break;
+                    }
 
                     CheckAndDeleteExpiredCacheItems();
                 }
