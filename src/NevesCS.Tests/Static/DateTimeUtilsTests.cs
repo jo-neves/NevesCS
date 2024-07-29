@@ -1,7 +1,7 @@
 using FluentAssertions;
 
 using NevesCS.Abstractions.Options;
-using NevesCS.Static.Constants.DateTime;
+using NevesCS.Static.Constants.DateAndTime;
 using NevesCS.Static.Extensions;
 using NevesCS.Static.Utils;
 

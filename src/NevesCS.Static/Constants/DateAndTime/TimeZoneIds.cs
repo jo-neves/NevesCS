@@ -1,10 +1,14 @@
 using System.Diagnostics.CodeAnalysis;
 
+<<<<<<<< HEAD:src/NevesCS.Static/Constants/DateTime/TimeZoneIds.cs
 <<<<<<<< HEAD:src/NevesCS.Static/Constants/DateAndTime/TimeZoneIds.cs
 namespace NevesCS.Static.Constants.DateAndTime
 ========
 namespace NevesCS.Static.Constants.DateTime
 >>>>>>>> edc3f9c (!reorg: small file reorg):src/NevesCS.Static/Constants/DateTime/TimeZoneIds.cs
+========
+namespace NevesCS.Static.Constants.DateAndTime
+>>>>>>>> 17778aa (build: fix):src/NevesCS.Static/Constants/DateAndTime/TimeZoneIds.cs
 {
     /// <summary>
     /// Windows: <see href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones"/> <br/>

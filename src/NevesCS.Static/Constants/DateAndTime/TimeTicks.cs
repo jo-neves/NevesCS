@@ -1,8 +1,12 @@
+<<<<<<<< HEAD:src/NevesCS.Static/Constants/DateTime/TimeTicks.cs
 <<<<<<<< HEAD:src/NevesCS.Static/Constants/DateAndTime/TimeTicks.cs
 namespace NevesCS.Static.Constants.DateAndTime
 ========
 namespace NevesCS.Static.Constants.DateTime
 >>>>>>>> edc3f9c (!reorg: small file reorg):src/NevesCS.Static/Constants/DateTime/TimeTicks.cs
+========
+namespace NevesCS.Static.Constants.DateAndTime
+>>>>>>>> 17778aa (build: fix):src/NevesCS.Static/Constants/DateAndTime/TimeTicks.cs
 {
     public static class TimeTicks
     {
