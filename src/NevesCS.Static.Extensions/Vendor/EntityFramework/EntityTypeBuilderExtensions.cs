@@ -14,7 +14,7 @@ namespace NevesCS.Static.Extensions.Vendor.EntityFramework
             this EntityTypeBuilder<TEntity> builder,
             DatabaseVendorName databaseVendor)
 
-            where TEntity : class, IAuditableEntity
+            where TEntity : class, IAutoUpdatedAuditableEntity
         {
             return EntityTypeBuilderUtils.ConfigureAuditableEntity(builder, databaseVendor);
         }
