@@ -1,15 +1,9 @@
-using NevesCS.Abstractions.Types;
 using NevesCS.Static.Constants.Values;
 
 namespace NevesCS.Static.Utils
 {
     public static class DateTimeOffsetTimeZoneUtils
     {
-        public static DateTimeOffset ToUtc(DateTimeOffset localDateTime, TimeZoneInfo sourceTimeZone)
-        {
-            return ToUtcOffset(localDateTime.DateTime, sourceTimeZone);
-        }
-
         public static DateTimeOffset ToUtcOffset(DateTime localDateTime, TimeZoneInfo sourceTimeZone)
         {
             return new DateTimeOffset(
@@ -17,20 +11,14 @@ namespace NevesCS.Static.Utils
                 TimeSpan.Zero);
         }
 
-        public static DateTime ToLocalDateTime(DateTimeOffset localDateTime, TimeZoneInfo targetTimeZone)
+        public static DateTime ToLocalDateTime(DateTimeOffset localDateTime, TimeZoneInfo sourceTimeZone)
         {
-            return TimeZoneInfo.ConvertTimeFromUtc(localDateTime.UtcDateTime, targetTimeZone);
+            return TimeZoneInfo.ConvertTimeFromUtc(localDateTime.UtcDateTime, sourceTimeZone);
         }
 
         public static bool IsUtc(this DateTimeOffset dateTime)
         {
             return dateTime.Offset == TimeSpan.Zero;
-        }
-
-        public static DayOfWeek GetDayOfWeek(DateTimeOffset utcDate, TimeZoneInfo timeZone)
-        {
-            var localDate = ToLocalDateTime(utcDate, timeZone);
-            return localDate.DayOfWeek;
         }
 
         /// <summary>
@@ -41,29 +29,6 @@ namespace NevesCS.Static.Utils
         {
             var localDate = ToLocalDateTime(utcDate, timeZone);
             return localDate.Day == DateTime.DaysInMonth(localDate.Year, localDate.Month);
-        }
-
-        public static bool IsInBetween(
-            DateTimeOffset utcTargetDate,
-            IFiniteDateRange utcFiniteDateRange,
-            TimeZoneInfo timeZone,
-            bool inclusive)
-        {
-            return IsInBetween(utcTargetDate, utcFiniteDateRange.Start, utcFiniteDateRange.End, timeZone, inclusive);
-        }
-
-        public static bool IsInBetween(
-            DateTimeOffset utcTargetDate,
-            DateTimeOffset utcStartDate,
-            DateTimeOffset utcEndDate,
-            TimeZoneInfo timeZone,
-            bool inclusive)
-        {
-            var localTargetDate = ToLocalDateTime(utcTargetDate, timeZone);
-            var localStartDate = ToLocalDateTime(utcStartDate, timeZone);
-            var localEndDate = ToLocalDateTime(utcEndDate, timeZone);
-
-            return DateTimeUtils.IsInBetween(localTargetDate, localStartDate, localEndDate, inclusive);
         }
 
         /// <summary>
@@ -83,7 +48,9 @@ namespace NevesCS.Static.Utils
         /// </summary>
         public static DateTimeOffset AddDays(DateTimeOffset date, double days, TimeZoneInfo timeZone)
         {
-            return ToUtcOffset(ToLocalDateTime(date, timeZone).AddDays(days), timeZone);
+            var localDate = ToLocalDateTime(date, timeZone).AddDays(days);
+
+            return ToUtcOffset(localDate, timeZone);
         }
 
         /// <summary>
@@ -103,7 +70,9 @@ namespace NevesCS.Static.Utils
         /// </summary>
         public static DateTimeOffset AddMonths(DateTimeOffset date, int months, TimeZoneInfo timeZone)
         {
-            return ToUtcOffset(ToLocalDateTime(date, timeZone).AddMonths(months), timeZone);
+            var localDate = ToLocalDateTime(date, timeZone).AddMonths(months);
+
+            return ToUtcOffset(localDate, timeZone);
         }
 
         /// <summary>
@@ -113,7 +82,9 @@ namespace NevesCS.Static.Utils
         /// </summary>
         public static DateTimeOffset AddYears(DateTimeOffset date, int years, TimeZoneInfo timeZone)
         {
-            return ToUtcOffset(ToLocalDateTime(date, timeZone).AddYears(years), timeZone);
+            var localDate = ToLocalDateTime(date, timeZone).AddYears(years);
+
+            return ToUtcOffset(localDate, timeZone);
         }
 
         /// <summary>
@@ -123,22 +94,20 @@ namespace NevesCS.Static.Utils
         /// </summary>
         public static DateTimeOffset ToStartOfDay(DateTimeOffset dateTime, TimeZoneInfo timeZone)
         {
-            return ToUtc(DateTimeUtils.ToStartOfDay(ToLocalDateTime(dateTime, timeZone)), timeZone);
-        }
+            var localDate = ToLocalDateTime(dateTime, timeZone);
 
-        /// <summary>
-        /// Returns the UTC date corresponding to the end of day for the UTC date in accordance with local timezone. <br/>
-        /// This is a DST aware method.
-        ///
-        /// </summary>
-        public static DateTimeOffset ToEndOfDay(DateTimeOffset dateTime, TimeZoneInfo timeZone)
-        {
-            return ToUtc(DateTimeUtils.ToEndOfDay(ToLocalDateTime(dateTime, timeZone)), timeZone);
+            return ToUtcOffset(
+                localDate
+                    .AddHours(-localDate.Hour)
+                    .AddMinutes(-localDate.Minute)
+                    .AddSeconds(-localDate.Second)
+                    .AddMilliseconds(-localDate.Millisecond),
+                timeZone);
         }
 
         public static DateTimeOffset ToStartOfWeek(DateTimeOffset date, TimeZoneInfo timeZone)
         {
-            var newDate = ToStartOfDay(ToLocalDateTime(date, timeZone), timeZone);
+            var newDate = ToStartOfDay(ToLocalDateTime(date, timeZone) , timeZone);
 
             var daysToAdd = 0;
 
@@ -166,20 +135,24 @@ namespace NevesCS.Static.Utils
                     break;
             }
 
-            return AddDays(newDate, daysToAdd, timeZone).ToUniversalTime();
+            newDate = AddDays(newDate, daysToAdd, timeZone);
+
+            return newDate.ToUniversalTime();
         }
 
         public static DateTimeOffset ToNextDayOfWeek(DateTimeOffset dateTime, DayOfWeek targetDayOfWeek, TimeZoneInfo timeZone)
         {
-            return ToUtc(DateTimeUtils.ToNextDayOfWeek(ToLocalDateTime(dateTime, timeZone), targetDayOfWeek), timeZone);
+            var localDate = ToLocalDateTime(dateTime, timeZone);
+            var currentDayOfWeek = localDate.DayOfWeek;
+
+            localDate = AddDays(localDate, targetDayOfWeek - currentDayOfWeek, timeZone).DateTime;
+
+            return ToUtcOffset(localDate, timeZone);
         }
 
         public static DateTimeOffset ToStartOfMonth(DateTimeOffset date, TimeZoneInfo timeZone)
         {
-            return AddDays(
-                ToStartOfDay(date, timeZone),
-                -(ToLocalDateTime(date, timeZone).Day - 1),
-                timeZone);
+            return AddDays(ToStartOfDay(date, timeZone), -(ToLocalDateTime(date, timeZone).Day - 1), timeZone);
         }
 
         /// <summary>

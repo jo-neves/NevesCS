@@ -1,5 +1,4 @@
 using NevesCS.Abstractions.Options;
-using NevesCS.Abstractions.Types;
 using NevesCS.Static.Constants.Values;
 
 namespace NevesCS.Static.Utils
@@ -53,11 +52,6 @@ namespace NevesCS.Static.Utils
             return DateTimeOffset.Now.Offset;
         }
 
-        public static DateOnly GetDateOnly(DateTime dateTime)
-        {
-            return DateOnly.FromDateTime(dateTime);
-        }
-
         public static DateTimeOffset SetTime(
             DateTimeOffset sourceDateTime,
             int hours,
@@ -66,7 +60,20 @@ namespace NevesCS.Static.Utils
             int milliseconds,
             int microseconds)
         {
-            return new DateTimeOffset(
+            return From(
+                SetTime(sourceDateTime.DateTime, hours, minutes, seconds, milliseconds, microseconds),
+                sourceDateTime.Offset);
+        }
+
+        public static DateTime SetTime(
+            DateTime sourceDateTime,
+            int hours,
+            int minutes,
+            int seconds,
+            int milliseconds,
+            int microseconds)
+        {
+            return new DateTime(
                 sourceDateTime.Year,
                 sourceDateTime.Month,
                 sourceDateTime.Day,
@@ -75,58 +82,82 @@ namespace NevesCS.Static.Utils
                 seconds,
                 milliseconds,
                 microseconds,
-                sourceDateTime.Offset);
+                sourceDateTime.Kind);
+        }
+        public static DateTimeOffset SetTicks(DateTimeOffset sourceDateTime, long ticks)
+        {
+            return From(SetTicks(sourceDateTime.DateTime, ticks), sourceDateTime.Offset);
         }
 
-        public static DateTimeOffset SetTicks(DateTimeOffset sourceDateTime, long ticks)
+        public static DateTime SetTicks(DateTime sourceDateTime, long ticks)
         {
             return ToStartOfDay(sourceDateTime).AddTicks(ticks);
         }
 
         public static DateTimeOffset ToNextDayOfWeek(DateTimeOffset sourceDateTime, DayOfWeek targetDayOfWeek)
         {
-            return From(sourceDateTime).AddDays(targetDayOfWeek - sourceDateTime.DayOfWeek);
+            return From(ToNextDayOfWeek(sourceDateTime.DateTime, targetDayOfWeek), sourceDateTime.Offset);
+        }
+
+        public static DateTime ToNextDayOfWeek(DateTime sourceDateTime, DayOfWeek targetDayOfWeek)
+        {
+            return sourceDateTime.AddDays(targetDayOfWeek - sourceDateTime.DayOfWeek);
         }
 
         public static DateTimeOffset ToStartOfDay(DateTimeOffset date)
         {
-            return From(date.Date, date.Offset);
+            return From(ToStartOfDay(date.DateTime), date.Offset);
+        }
+
+        public static DateTime ToStartOfDay(DateTime date)
+        {
+            return new DateTime(date.Year, date.Month, date.Day, 00, 00, 00, 00, 00, date.Kind);
         }
 
         public static DateTimeOffset ToEndOfDay(DateTimeOffset date)
         {
-            return ToStartOfDay(date).AddDays(1).AddMilliseconds(-1);
+            return From(ToEndOfDay(date.DateTime), date.Offset);
+        }
+
+        public static DateTime ToEndOfDay(DateTime date)
+        {
+            return ToStartOfDay(date).AddDays(Ints.One).AddTicks(-Ints.One);
         }
 
         public static DateTimeOffset ToStartOfWeek(DateTimeOffset date)
         {
-            var newDateStartOfDay = ToStartOfDay(date);
+            return From(ToStartOfWeek(date.DateTime), date.Offset);
+        }
 
-            switch (newDateStartOfDay.DayOfWeek)
+        public static DateTime ToStartOfWeek(DateTime date)
+        {
+            var newDate = ToStartOfDay(From(date));
+
+            switch (newDate.DayOfWeek)
             {
                 case DayOfWeek.Monday:
                     break;
                 case DayOfWeek.Tuesday:
-                    newDateStartOfDay = newDateStartOfDay.AddDays(-1);
+                    newDate = newDate.AddDays(-Ints.One);
                     break;
                 case DayOfWeek.Wednesday:
-                    newDateStartOfDay = newDateStartOfDay.AddDays(-2);
+                    newDate = newDate.AddDays(-Ints.Two);
                     break;
                 case DayOfWeek.Thursday:
-                    newDateStartOfDay = newDateStartOfDay.AddDays(-3);
+                    newDate = newDate.AddDays(-Ints.Three);
                     break;
                 case DayOfWeek.Friday:
-                    newDateStartOfDay = newDateStartOfDay.AddDays(-4);
+                    newDate = newDate.AddDays(-Ints.Four);
                     break;
                 case DayOfWeek.Saturday:
-                    newDateStartOfDay = newDateStartOfDay.AddDays(-5);
+                    newDate = newDate.AddDays(-Ints.Five);
                     break;
                 case DayOfWeek.Sunday:
-                    newDateStartOfDay = newDateStartOfDay.AddDays(-6);
+                    newDate = newDate.AddDays(-Ints.Six);
                     break;
             }
 
-            return newDateStartOfDay;
+            return newDate;
         }
 
         public static DateTimeOffset ToNext(
@@ -134,57 +165,41 @@ namespace NevesCS.Static.Utils
             TimeComponent timeComponent,
             double componentQuantity = Ints.One)
         {
-            var newDate = From(source);
+            return From(ToNext(source.DateTime, timeComponent, componentQuantity), source.Offset);
+        }
 
+        public static DateTime ToNext(
+            DateTime source,
+            TimeComponent timeComponent,
+            double componentQuantity = Ints.One)
+        {
             return timeComponent switch
             {
-                TimeComponent.Second => newDate
-                    .AddMilliseconds(-newDate.Millisecond)
-                    .AddMicroseconds(-newDate.Microsecond)
+                TimeComponent.Second => source
+                    .AddMilliseconds(-source.Millisecond)
+                    .AddMicroseconds(-source.Microsecond)
                     .AddSeconds(componentQuantity),
-
-                TimeComponent.Minute => newDate
-                    .AddSeconds(-newDate.Second)
-                    .AddMilliseconds(-newDate.Millisecond)
-                    .AddMicroseconds(-newDate.Microsecond)
+                TimeComponent.Minute => source
+                    .AddSeconds(-source.Second)
+                    .AddMilliseconds(-source.Millisecond)
+                    .AddMicroseconds(-source.Microsecond)
                     .AddMinutes(componentQuantity),
-
-                TimeComponent.Hour => newDate
-                    .AddMinutes(-newDate.Minute)
-                    .AddSeconds(-newDate.Second)
-                    .AddMilliseconds(-newDate.Millisecond)
-                    .AddMicroseconds(-newDate.Microsecond)
+                TimeComponent.Hour => source
+                    .AddMinutes(-source.Minute)
+                    .AddSeconds(-source.Second)
+                    .AddMilliseconds(-source.Millisecond)
+                    .AddMicroseconds(-source.Microsecond)
                     .AddHours(componentQuantity),
-
-                TimeComponent.Day => newDate
-                    .AddHours(-newDate.Hour)
-                    .AddMinutes(-newDate.Minute)
-                    .AddSeconds(-newDate.Second)
-                    .AddMilliseconds(-newDate.Millisecond)
-                    .AddMicroseconds(-newDate.Microsecond)
+                TimeComponent.Day => source
+                    .AddHours(-source.Hour)
+                    .AddMinutes(-source.Minute)
+                    .AddSeconds(-source.Second)
+                    .AddMilliseconds(-source.Millisecond)
+                    .AddMicroseconds(-source.Microsecond)
                     .AddDays(componentQuantity),
 
                 _ => throw new NotImplementedException(),
             };
-        }
-
-        public static bool IsInBetween(
-            DateTimeOffset targetDate,
-            IFiniteDateRange finiteDateRange,
-            bool inclusive)
-        {
-            return IsInBetween(targetDate, finiteDateRange.Start, finiteDateRange.End, inclusive);
-        }
-
-        public static bool IsInBetween(
-            DateTimeOffset targetDate,
-            DateTimeOffset startDate,
-            DateTimeOffset endDate,
-            bool inclusive)
-        {
-            return inclusive
-                ? startDate <= targetDate && targetDate <= endDate
-                : startDate < targetDate && targetDate < endDate;
         }
     }
 }

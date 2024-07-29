@@ -1,6 +1,6 @@
 using FluentAssertions;
 
-using NevesCS.Static.Constants.DateAndTime;
+using NevesCS.Static.Constants.DateTime;
 
 namespace NevesCS.Tests.Static.Constants
 {

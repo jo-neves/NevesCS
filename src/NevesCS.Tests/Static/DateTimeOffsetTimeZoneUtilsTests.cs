@@ -1,6 +1,6 @@
 using FluentAssertions;
 
-using NevesCS.Static.Constants.DateAndTime;
+using NevesCS.Static.Constants.DateTime;
 using NevesCS.Static.Extensions;
 
 namespace NevesCS.Tests.Static
@@ -109,37 +109,6 @@ namespace NevesCS.Tests.Static
                 .AddMonths(2, localTimeZone)
                 .Should()
                 .Be(new DateTimeOffset(2024, 05, 11, midnight, 00, 00, DbTimeSpan));
-        }
-
-        [Theory]
-        [InlineData(
-            2024, 10, 25, 23, 00, 00,
-            2024, 10, 26, 22, 59, 59, 999)]
-        [InlineData(
-            // "2024-10-26 23:00:00.000 +0000" is "2024-10-27 00:00:00.000 +0100"
-            2024, 10, 26, 23, 00, 00,
-            2024, 10, 27, 23, 59, 59, 999)]
-        [InlineData(
-            2024, 10, 27, 23, 00, 00,
-            2024, 10, 27, 23, 59, 59, 999)]
-        public void ToEndOfDayDstAware_WorksWithTimeZones(
-            int sourceEndYear, int sourceEndMonth, int sourceEndDay, int sourceEndHour, int sourceEndMinute, int sourceEndSecond,
-            int expectedEndYear, int expectedEndMonth, int expectedEndDay, int expectedEndHour, int expectedEndMinute, int expectedEndSecond, int expectedMilliseconds)
-        {
-            var startDate = new DateTimeOffset(sourceEndYear, sourceEndMonth, sourceEndDay, sourceEndHour, sourceEndMinute, sourceEndSecond, DbTimeSpan);
-
-            startDate
-                .ToEndOfDay(TimeZones.London)
-                .Should()
-                .Be(new DateTimeOffset(
-                    expectedEndYear,
-                    expectedEndMonth,
-                    expectedEndDay,
-                    expectedEndHour,
-                    expectedEndMinute,
-                    expectedEndSecond,
-                    expectedMilliseconds,
-                    DbTimeSpan));
         }
 
         [Theory]

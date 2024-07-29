@@ -1,4 +1,4 @@
-using NevesCS.Static.Constants.DateAndTime;
+using NevesCS.Static.Constants.DateTime;
 
 using System.Runtime.InteropServices;
 
