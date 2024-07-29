@@ -8,9 +8,6 @@ using NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Abstractions;
 using NevesCS.Static.Utils.Web3.Solana;
 
 using Solnet.Rpc;
-using Solnet.Rpc.Core.Http;
-using Solnet.Rpc.Messages;
-using Solnet.Rpc.Models;
 using Solnet.Rpc.Types;
 using Solnet.Wallet;
 
@@ -84,11 +81,11 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi
             var httpClient = GetHttpClient();
             var rpcClient = GetRpcClient(httpClient);
 
-            SolanaJupiterV6QuoteApiResponse? quoteResponse = await GetQuoteAsync(request, httpClient, rpcClient, cancellationToken);
+            var quoteResponse = await GetQuoteAsync(request, httpClient, rpcClient, cancellationToken);
 
-            byte[] tx = await GetSwapTransactionAsync(quoteResponse.Value, httpClient, cancellationToken);
+            var tx = await GetSwapTransactionAsync(quoteResponse.Value, httpClient, cancellationToken);
 
-            RequestResult<ResponseValue<SimulationLogs>> simulation = await rpcClient.SimulateTransactionAsync(
+            var simulation = await rpcClient.SimulateTransactionAsync(
                transaction: tx,
                replaceRecentBlockhash: true);
 
@@ -97,13 +94,13 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi
                 throw new SolanaRpcException(JsonParser.SerializeObject(simulation));
             }
 
-            RequestResult<string> txResponse = (await rpcClient.SendTransactionAsync(
+            var txResponse = (await rpcClient.SendTransactionAsync(
                 transaction: tx,
                 commitment: Commitment.Finalized));
 
             if (!txResponse.WasSuccessful || txResponse.ErrorData != null)
             {
-                throw new SolanaRpcException(JsonParser.SerializeObject(txResponse));
+                throw new SolanaRpcException(JsonParser.SerializeObject(simulation));
             }
 
             if (HasFactory)
@@ -114,7 +111,6 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi
             return new SolanaJupiterV6SwapTransactionResponse()
             {
                 TxId = txResponse.Result,
-                Quote = quoteResponse.Value,
             };
         }
 
@@ -150,7 +146,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi
                 ? request.BaseAssetAddress
                 : request.QuoteAssetAddress;
 
-            RequestResult<ResponseValue<TokenAccountInfo>> tokenInDecimalCountRes = await rpcClient.GetTokenAccountInfoAsync(tokenIn);
+            var tokenInDecimalCountRes = await rpcClient.GetTokenAccountInfoAsync(tokenIn);
 
             if (!tokenInDecimalCountRes.WasSuccessful || tokenInDecimalCountRes.ErrorData != null)
             {
@@ -199,7 +195,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi
             HttpClient httpClient,
             CancellationToken cancellationToken = default)
         {
-            HttpResponseMessage swapTxResponse = await httpClient.PostAsJsonAsync(
+            var swapTxResponse = await httpClient.PostAsJsonAsync(
                 $"{SolanaJupiterConstants.BaseUrlApiQuote}/swap",
                 new SolanaJupiterV6SwapApiRequest()
                 {

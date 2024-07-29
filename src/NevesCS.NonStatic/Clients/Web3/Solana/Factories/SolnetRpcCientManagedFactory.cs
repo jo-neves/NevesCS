@@ -4,7 +4,7 @@ using NevesCS.Static.Utils;
 
 using Solnet.Rpc;
 
-namespace NevesCS.NonStatic.Clients.Web3.Solana
+namespace NevesCS.NonStatic.Clients.Web3.Solana.Factories
 {
     public sealed class SolnetRpcCientManagedFactory : IManagedServiceFactory<IRpcClient>
     {

@@ -1,4 +1,3 @@
-using NevesCS.Abstractions.Clients.Web3.SolanaJupiterHttpApi;
 using NevesCS.Abstractions.Interfaces;
 using NevesCS.NonStatic.Patterns;
 using NevesCS.Static.Utils;
@@ -6,7 +5,7 @@ using NevesCS.Static.Utils;
 namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
 {
     public sealed class SolanaJupiterV6PublicRestClientManagedFactory
-        : IManagedServiceFactory<ISolanaJupiterV6PublicClient>
+        : IManagedServiceFactory<SolanaJupiterV6PublicRestClient>
     {
         private readonly ICachedServiceFactory<HttpClient> HttpClientCachedFactory;
 
@@ -15,17 +14,17 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
             HttpClientCachedFactory = ObjectUtils.ThrowIfNull(httpClientCachedFactory, nameof(httpClientCachedFactory));
         }
 
-        public ISolanaJupiterV6PublicClient Create(string key)
+        public SolanaJupiterV6PublicRestClient Create(string key)
         {
             return new SolanaJupiterV6PublicRestClient(HttpClientCachedFactory.Create(key));
         }
 
-        public static ICachedServiceFactory<ISolanaJupiterV6PublicClient> CreateNewManager(
+        public static ICachedServiceFactory<SolanaJupiterV6PublicRestClient> CreateNewManager(
             CachedFactoryOptions options,
             ICachedServiceFactory<HttpClient> httpClientCachedFactory,
             CancellationToken cancellationToken = default)
         {
-            return new CachedServiceFactoryManager<ISolanaJupiterV6PublicClient>(
+            return new CachedServiceFactoryManager<SolanaJupiterV6PublicRestClient>(
                 options,
                 new SolanaJupiterV6PublicRestClientManagedFactory(httpClientCachedFactory),
                 cancellationToken);

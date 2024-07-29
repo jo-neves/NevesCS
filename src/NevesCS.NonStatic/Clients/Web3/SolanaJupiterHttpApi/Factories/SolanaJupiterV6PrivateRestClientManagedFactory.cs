@@ -1,4 +1,3 @@
-using NevesCS.Abstractions.Clients.Web3.SolanaJupiterHttpApi;
 using NevesCS.Abstractions.Interfaces;
 using NevesCS.Abstractions.Services;
 using NevesCS.NonStatic.Patterns;
@@ -10,7 +9,7 @@ using Solnet.Wallet;
 namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
 {
     public sealed class SolanaJupiterV6PrivateRestClientManagedFactory
-        : IManagedServiceFactory<ISolanaJupiterV6PrivateClient>
+        : IManagedServiceFactory<SolanaJupiterV6PrivateRestClient>
     {
         private readonly Wallet Wallet;
 
@@ -32,7 +31,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
             JsonParser = ObjectUtils.ThrowIfNull(jsonParser, nameof(jsonParser));
         }
 
-        public ISolanaJupiterV6PrivateClient Create(string key)
+        public SolanaJupiterV6PrivateRestClient Create(string key)
         {
             return new SolanaJupiterV6PrivateRestClient(
                 Wallet,
@@ -41,7 +40,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
                 JsonParser);
         }
 
-        public static ICachedServiceFactory<ISolanaJupiterV6PrivateClient> CreateNewManager(
+        public static ICachedServiceFactory<SolanaJupiterV6PrivateRestClient> CreateNewManager(
             CachedFactoryOptions options,
             Wallet wallet,
             ICachedServiceFactory<HttpClient> httpClientCachedFactory,
@@ -49,7 +48,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
             IJsonParser jsonParser,
             CancellationToken cancellationToken = default)
         {
-            return new CachedServiceFactoryManager<ISolanaJupiterV6PrivateClient>(
+            return new CachedServiceFactoryManager<SolanaJupiterV6PrivateRestClient>(
                 options,
                 new SolanaJupiterV6PrivateRestClientManagedFactory(
                     wallet,
