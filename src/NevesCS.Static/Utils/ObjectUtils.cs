@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace NevesCS.Static.Utils
 {
@@ -9,31 +11,27 @@ namespace NevesCS.Static.Utils
             return @object == null;
         }
 
-        public static bool IsNotNull<T>(T? @object)
-        {
-            return !IsNull(@object);
-        }
-
         public static bool IsNullOrDefault<T>(T? @object)
         {
-            return IsNull(@object) || Equals(@object, default(T?));
-        }
-
-        public static bool IsNotNullNorDefault<T>(T? @object)
-        {
-            return !IsNull(@object) && !Equals(@object, default(T?));
+            return @object == null || Equals(@object, default(T?));
         }
 
         public static T ThrowIfNull<T>(T? @object, Type type)
         {
-            ArgumentNullException.ThrowIfNull(@object, type.Name);
+            if (IsNull(@object))
+            {
+                throw new ArgumentNullException(type.Name);
+            }
 
             return @object!;
         }
 
         public static T ThrowIfNull<T>(T? @object, string parameterName)
         {
-            ArgumentNullException.ThrowIfNull(@object, parameterName);
+            if (IsNull(@object))
+            {
+                throw new ArgumentNullException(parameterName);
+            }
 
             return @object!;
         }
@@ -43,18 +41,6 @@ namespace NevesCS.Static.Utils
             Debug.Assert(!IsNull(@object), parameterName);
 
             return @object!;
-        }
-
-        public static T AssertTrue<T>(T @object, bool condition, string message)
-        {
-            Debug.Assert(condition, message);
-
-            return @object;
-        }
-
-        public static TOut? CastAs<TOut>(object @object)
-        {
-            return @object is not TOut ? default : (TOut)@object;
         }
 
         /// <summary>
@@ -110,6 +96,88 @@ namespace NevesCS.Static.Utils
         public static T[] ToArray<T>(object source)
         {
             return [(T)source];
+        }
+
+        /// <summary>
+        /// Return true if the <paramref name="target"/> has the requested property.
+        ///
+        /// </summary>
+        public static bool HasProperty(object target, string propertyName)
+        {
+            return target
+                .GetType()
+                .GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance)
+                != null;
+        }
+
+        /// <summary>
+        /// <code>
+        /// ObjectUtils.SetPropertyDynamically(
+        ///     myClassInstance,
+        ///     nameof(MyClass.WithThisProperty),
+        ///     someValueToAdd);
+        /// </code>
+        /// <code>
+        /// ObjectUtils.SetPropertyDynamically(
+        ///     myClassInstance,
+        ///     "ThisProperty.WithThisSubProperty"
+        ///     someValueToAdd);
+        /// </code>
+        /// </summary>
+        public static object SetPropertyDynamically(object target, string propertyPath, object value)
+        {
+            var subPropertyNames = propertyPath.Split('.');
+
+            for (int i = 0; i < subPropertyNames.Length - 1; i++)
+            {
+                var property = target.GetType().GetProperty(subPropertyNames[i]);
+                target = property.GetValue(target) ?? throw new NullReferenceException(subPropertyNames[i]);
+            }
+
+            var finalProperty = target
+                .GetType()
+                .GetProperty(subPropertyNames.Last())
+                ?? throw new MissingFieldException(subPropertyNames.Last());
+
+            finalProperty.SetValue(target, value);
+
+            return target;
+        }
+
+        /// <summary>
+        /// E.g.:
+        /// <code>
+        /// ObjectUtils.CallMethodOfPropertyDynamically(
+        ///     myClassInstance,
+        ///     nameof(MyClass.WithThisListProperty),
+        ///     nameof(MyClass.WithThisListProperty.AddRange),
+        ///     someListOfValuesToAdd);
+        /// </code>
+        /// </summary>
+        public static void CallMethodOfPropertyDynamically(
+            object target,
+            string propertyName,
+            string methodName,
+            object value)
+        {
+            var propertyInfo = target
+                .GetType()
+                .GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance)
+                ?? throw new MissingFieldException(propertyName);
+
+            var methodInfo = propertyInfo
+                .PropertyType
+                .GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance)
+                ?? throw new MissingMethodException(methodName);
+
+            var targetProperty = propertyInfo.GetValue(target);
+
+            if (!methodInfo.IsStatic && targetProperty == null)
+            {
+                throw new NullReferenceException(propertyName);
+            }
+
+            methodInfo.Invoke(targetProperty, [value]);
         }
     }
 }

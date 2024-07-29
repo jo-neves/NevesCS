@@ -9,16 +9,6 @@ namespace NevesCS.Static.Extensions
             return ObjectUtils.IsNull(@object);
         }
 
-        public static bool IsNotNull<T>(this T? @object)
-        {
-            return ObjectUtils.IsNotNull(@object);
-        }
-
-        public static bool IsNotNullNorDefault<T>(this T? @object)
-        {
-            return ObjectUtils.IsNotNullNorDefault(@object);
-        }
-
         public static bool IsNullOrDefault<T>(this T? @object)
         {
             return ObjectUtils.IsNullOrDefault(@object);
@@ -39,34 +29,9 @@ namespace NevesCS.Static.Extensions
             return ObjectUtils.AssertNotNull(@object, parameterName);
         }
 
-        public static T AssertTrue<T>(this T @object, bool condition, string message)
-        {
-            return ObjectUtils.AssertTrue(@object, condition, message);
-        }
-
-        public static bool IsIn<TIn>(this TIn? @object, params TIn[] target)
-        {
-            return target.Contains(@object);
-        }
-
         public static bool IsIn<TIn>(this TIn? @object, IEnumerable<TIn> target)
         {
             return target.Contains(@object);
-        }
-
-        public static bool IsNotIn<TIn>(this TIn? @object, params TIn[] target)
-        {
-            return !IsIn(@object, target);
-        }
-
-        public static bool IsNotIn<TIn>(this TIn? @object, IEnumerable<TIn> target)
-        {
-            return !IsIn(@object, target);
-        }
-
-        public static TOut? CastAs<TOut>(this object @object)
-        {
-            return ObjectUtils.CastAs<TOut>(@object);
         }
 
         /// <summary>
@@ -104,6 +69,50 @@ namespace NevesCS.Static.Extensions
         public static T[] ToArray<T>(this object source)
         {
             return ObjectUtils.ToArray<T>(source);
+        }
+
+        /// <summary>
+        /// Return true if the <paramref name="target"/> has the requested property.
+        ///
+        /// </summary>
+        public static bool HasProperty(this object target, string propertyName)
+        {
+            return ObjectUtils.HasProperty(target, propertyName);
+        }
+
+        /// <summary>
+        /// <code>
+        /// myClassInstance.SetPropertyDynamically(
+        ///     nameof(MyClass.WithThisProperty),
+        ///     someValueToAdd);
+        /// </code>
+        /// <code>
+        /// myClassInstance.SetPropertyDynamically(
+        ///     "ThisProperty.WithThisSubProperty"
+        ///     someValueToAdd);
+        /// </code>
+        /// </summary>
+        public static object SetPropertyDynamically(this object target, string propertyPath, object value)
+        {
+            return ObjectUtils.SetPropertyDynamically(target, propertyPath, value);
+        }
+
+        /// <summary>
+        /// E.g.:
+        /// <code>
+        /// myClassInstance.CallMethodOfPropertyDynamically(
+        ///     nameof(MyClass.WithThisListProperty),
+        ///     nameof(MyClass.WithThisListProperty.AddRange),
+        ///     someListOfValuesToAdd);
+        /// </code>
+        /// </summary>
+        public static void CallMethodOfPropertyDynamically(
+            this object target,
+            string propertyName,
+            string methodName,
+            object value)
+        {
+            ObjectUtils.CallMethodOfPropertyDynamically(target, propertyName, methodName, value);
         }
     }
 }
