@@ -8,8 +8,9 @@ using System.Diagnostics.CodeAnalysis;
 namespace NevesCS.NonStatic.Patterns
 {
     /// <summary>
-    /// This is to be used only in cases where the lifetimes of objects needs to be optimized.
-    /// Otherwise, the creation should be manged through DI.
+    /// This is to be used only in cases where the lifetimes of objects need to be optimized,
+    /// like on environments where DI is not used for performance reasons.
+    /// Otherwise, object creation should be manged through a DI solution.
     ///
     /// </summary>
     public sealed class CachedServiceFactoryManager<TService> : ICachedServiceFactory<TService>, IDisposable
