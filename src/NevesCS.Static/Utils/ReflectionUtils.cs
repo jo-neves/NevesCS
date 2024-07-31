@@ -46,6 +46,18 @@ namespace NevesCS.Static.Utils
         }
 
         /// <summary>
+        /// Gets a specific Type by name, supporting external assemblies.
+        ///
+        /// </summary>
+        /// <typeparam name="KnownType">A known type embedded in the Assembly where the <paramref name="typeName"/> belongs to.</typeparam>
+        public static Type GetTypeFrom<KnownType>(string typeName)
+        {
+            return typeof(KnownType).Assembly.DefinedTypes
+                .First(type => type.Name == typeName)
+                .AsType();
+        }
+
+        /// <summary>
         /// Return true if the <paramref name="target"/> has the requested property.
         ///
         /// </summary>

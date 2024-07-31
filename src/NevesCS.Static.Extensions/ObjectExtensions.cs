@@ -34,6 +34,11 @@ namespace NevesCS.Static.Extensions
             return target.Contains(@object);
         }
 
+        public static TOut? CastAs<TOut>(this object @object)
+        {
+            return ObjectUtils.CastAs<TOut>(@object);
+        }
+
         /// <summary>
         /// Enumerates the same instance reference (<paramref name="source"/>) times the number defined by <paramref name="repeatTimes"/>.
         ///

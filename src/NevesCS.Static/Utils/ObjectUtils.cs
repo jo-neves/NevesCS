@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using System.Linq.Expressions;
-using System.Reflection;
 
 namespace NevesCS.Static.Utils
 {
@@ -41,6 +39,11 @@ namespace NevesCS.Static.Utils
             Debug.Assert(!IsNull(@object), parameterName);
 
             return @object!;
+        }
+
+        public static TOut? CastAs<TOut>(object @object)
+        {
+            return @object is not TOut ? default : (TOut)@object;
         }
 
         /// <summary>
