@@ -1,6 +1,9 @@
-using NevesCS.Static.Utils.Vendor;
+using NevesCS.Static.Utils;
+
+using System.Reflection;
 
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace NevesCS.Static.Extensions.Vendor
 {
@@ -17,7 +20,31 @@ namespace NevesCS.Static.Extensions.Vendor
         /// <returns></returns>
         public static object? CreateInstanceByTypeName<KnownType>(this Table table, string typeName)
         {
-            return SpecFlowUtils.CreateInstanceByTypeName<KnownType>(table, typeName);
+            var modelType = ReflectionUtils.GetTypeFrom<KnownType>(typeName);
+
+            return table.GetFirstCreateInstanceMethodInfo(modelType)!.CallFirstCreateInstanceMethodInfo(table);
+        }
+
+        private static MethodInfo? GetFirstCreateInstanceMethodInfo(this Table? _, Type genericType)
+        {
+            var tableCreateInstanceMethod = typeof(TableHelperExtensionMethods)
+                .GetMethods(BindingFlags.Static | BindingFlags.Public)
+                .Where(method => method.Name == nameof(TableHelperExtensionMethods.CreateInstance)
+                                 && method.GetGenericArguments().Length == 1)
+                !
+                .First();
+
+            return tableCreateInstanceMethod.MakeGenericMethod(genericType);
+        }
+
+        private static object? CallFirstCreateInstanceMethodInfo(this MethodInfo tableCreateInstanceMethod, Table table)
+        {
+            return tableCreateInstanceMethod.CallFirstCreateInstanceMethodInfo<object?>(table);
+        }
+
+        private static T? CallFirstCreateInstanceMethodInfo<T>(this MethodInfo tableCreateInstanceMethod, Table table)
+        {
+            return (T?)tableCreateInstanceMethod.Invoke(null, new[] { table });
         }
     }
 }
