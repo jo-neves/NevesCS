@@ -201,5 +201,26 @@ namespace NevesCS.Static.Utils
                 _ => throw new NotImplementedException(),
             };
         }
+
+        public static bool IsInBetween(
+            DateTimeOffset targetDate,
+            IFiniteDateRange finiteDateRange,
+            TimeZoneInfo timeZone,
+            bool inclusive)
+        {
+            return IsInBetween(targetDate, finiteDateRange.Start, finiteDateRange.End, timeZone, inclusive);
+        }
+
+        public static bool IsInBetween(
+            DateTimeOffset targetDate,
+            DateTimeOffset startDate,
+            DateTimeOffset endDate,
+            TimeZoneInfo timeZone,
+            bool inclusive)
+        {
+            return inclusive
+                ? startDate <= targetDate && targetDate <= endDate
+                : startDate < targetDate && targetDate < endDate;
+        }
     }
 }

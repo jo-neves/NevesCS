@@ -31,6 +31,29 @@ namespace NevesCS.Static.Utils
             return localDate.Day == DateTime.DaysInMonth(localDate.Year, localDate.Month);
         }
 
+        public static bool IsInBetween(
+            DateTimeOffset utcTargetDate,
+            IFiniteDateRange utcFiniteDateRange,
+            TimeZoneInfo timeZone,
+            bool inclusive)
+        {
+            return IsInBetween(utcTargetDate, utcFiniteDateRange.Start, utcFiniteDateRange.End, timeZone, inclusive);
+        }
+
+        public static bool IsInBetween(
+            DateTimeOffset utcTargetDate,
+            DateTimeOffset utcStartDate,
+            DateTimeOffset utcEndDate,
+            TimeZoneInfo timeZone,
+            bool inclusive)
+        {
+            var localTargetDate = ToLocalDateTime(utcTargetDate, timeZone);
+            var localStartDate = ToLocalDateTime(utcStartDate, timeZone);
+            var localEndDate = ToLocalDateTime(utcEndDate, timeZone);
+
+            return DateTimeUtils.IsInBetween(localTargetDate, localStartDate, localEndDate, timeZone, inclusive);
+        }
+
         /// <summary>
         /// Counts the number of days in the specified time zone.
         ///
