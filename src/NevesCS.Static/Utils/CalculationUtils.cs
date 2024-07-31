@@ -24,7 +24,7 @@ namespace NevesCS.Static.Utils
 
         /// <summary>
         /// Returns a percentage of the original number.
-        /// E.g.: 150.SubtractPercentage(20) == 30
+        /// E.g.: SubtractPercentage(150, 20) == 30
         ///
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
@@ -37,7 +37,7 @@ namespace NevesCS.Static.Utils
 
         /// <summary>
         /// Returns a percentage of the original number.
-        /// E.g.: 150.SubtractFractionalPercentage(0.20) == 30
+        /// E.g.: SubtractFractionalPercentage(150, 0.20) == 30
         ///
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
