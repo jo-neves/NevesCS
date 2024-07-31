@@ -171,17 +171,15 @@ namespace NevesCS.Static.Utils
         public static bool IsInBetween(
             DateTimeOffset targetDate,
             IFiniteDateRange finiteDateRange,
-            TimeZoneInfo timeZone,
             bool inclusive)
         {
-            return IsInBetween(targetDate, finiteDateRange.Start, finiteDateRange.End, timeZone, inclusive);
+            return IsInBetween(targetDate, finiteDateRange.Start, finiteDateRange.End, inclusive);
         }
 
         public static bool IsInBetween(
             DateTimeOffset targetDate,
             DateTimeOffset startDate,
             DateTimeOffset endDate,
-            TimeZoneInfo timeZone,
             bool inclusive)
         {
             return inclusive

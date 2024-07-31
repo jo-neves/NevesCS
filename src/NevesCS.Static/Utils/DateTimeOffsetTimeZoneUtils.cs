@@ -57,7 +57,7 @@ namespace NevesCS.Static.Utils
             var localStartDate = ToLocalDateTime(utcStartDate, timeZone);
             var localEndDate = ToLocalDateTime(utcEndDate, timeZone);
 
-            return DateTimeUtils.IsInBetween(localTargetDate, localStartDate, localEndDate, timeZone, inclusive);
+            return DateTimeUtils.IsInBetween(localTargetDate, localStartDate, localEndDate, inclusive);
         }
 
         /// <summary>

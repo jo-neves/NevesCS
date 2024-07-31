@@ -1,4 +1,5 @@
 using NevesCS.Abstractions.Options;
+using NevesCS.Abstractions.Types;
 using NevesCS.Static.Constants.Values;
 using NevesCS.Static.Utils;
 
@@ -48,6 +49,23 @@ namespace NevesCS.Static.Extensions
             double componentQuantity = Ints.One)
         {
             return DateTimeUtils.ToNext(source, timeComponent, componentQuantity);
+        }
+
+        public static bool IsInBetween(
+            this DateTimeOffset targetDate,
+            IFiniteDateRange finiteDateRange,
+            bool inclusive)
+        {
+            return IsInBetween(targetDate, finiteDateRange.Start, finiteDateRange.End, inclusive);
+        }
+
+        public static bool IsInBetween(
+            this DateTimeOffset targetDate,
+            DateTimeOffset startDate,
+            DateTimeOffset endDate,
+            bool inclusive)
+        {
+            return DateTimeUtils.IsInBetween(targetDate, startDate, endDate, inclusive);
         }
     }
 }
