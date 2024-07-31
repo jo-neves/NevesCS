@@ -25,7 +25,7 @@ namespace NevesCS.NonStatic.Clients.Web3.Solana.Factories
                 httpClient: HttpClientFactory.CreateClient($"{nameof(IRpcClient)}_{key}"));
         }
 
-        public static ICachedServiceFactory<IRpcClient> CreateNewManager(
+        public static CachedServiceFactoryManager<IRpcClient> CreateNewManager(
             CachedFactoryOptions options,
             IHttpClientFactory httpClientFactory,
             Cluster clusterType,

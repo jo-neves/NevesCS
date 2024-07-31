@@ -13,12 +13,12 @@ namespace NevesCS.NonStatic.Clients
             HttpClientFactory = ObjectUtils.ThrowIfNull(httpClientFactory, nameof(httpClientFactory));
         }
 
-        HttpClient IManagedServiceFactory<HttpClient>.Create(string key)
+        public HttpClient Create(string key)
         {
             return HttpClientFactory.CreateClient(key);
         }
 
-        public static ICachedServiceFactory<HttpClient> CreateNewManager(
+        public static CachedServiceFactoryManager<HttpClient> CreateNewManager(
             CachedFactoryOptions options,
             IHttpClientFactory httpClientFactory,
             CancellationToken cancellationToken = default)

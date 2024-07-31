@@ -33,7 +33,7 @@ namespace NevesCS.NonStatic.Clients.Web3.Solana.Factories
             return new HttpSolanaClient(Options, RpcClientFactory.Create(key), JsonParser, CancellationToken);
         }
 
-        public static ICachedServiceFactory<HttpSolanaClient> CreateNewManager(
+        public static CachedServiceFactoryManager<HttpSolanaClient> CreateNewManager(
             CachedFactoryOptions cachedFactoryOptions,
             HttpSolanaClientOptions httpSolanaClientOptions,
             ICachedServiceFactory<IRpcClient> rpcClientFactory,

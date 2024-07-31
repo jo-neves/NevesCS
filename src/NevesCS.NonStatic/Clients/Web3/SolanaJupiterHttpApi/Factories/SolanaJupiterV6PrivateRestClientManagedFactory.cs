@@ -40,7 +40,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
                 JsonParser);
         }
 
-        public static ICachedServiceFactory<SolanaJupiterV6PrivateRestClient> CreateNewManager(
+        public static CachedServiceFactoryManager<SolanaJupiterV6PrivateRestClient> CreateNewManager(
             CachedFactoryOptions options,
             Wallet wallet,
             ICachedServiceFactory<HttpClient> httpClientCachedFactory,

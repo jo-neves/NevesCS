@@ -19,7 +19,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
             return new SolanaJupiterV6PublicRestClient(HttpClientCachedFactory.Create(key));
         }
 
-        public static ICachedServiceFactory<SolanaJupiterV6PublicRestClient> CreateNewManager(
+        public static CachedServiceFactoryManager<SolanaJupiterV6PublicRestClient> CreateNewManager(
             CachedFactoryOptions options,
             ICachedServiceFactory<HttpClient> httpClientCachedFactory,
             CancellationToken cancellationToken = default)

@@ -32,7 +32,7 @@ namespace NevesCS.NonStatic.Clients.Web3.DexToolsClient.Factories
                 : new DexToolsV1HttpClient(HttpClientCachedFactory.Create(key), ThreadRateLimiter);
         }
 
-        public static ICachedServiceFactory<IDexToolsClient> CreateNewManager(
+        public static CachedServiceFactoryManager<IDexToolsClient> CreateNewManager(
             CachedFactoryOptions options,
             ICachedServiceFactory<HttpClient> httpClientCachedFactory,
             CancellationToken cancellationToken = default)
@@ -43,7 +43,7 @@ namespace NevesCS.NonStatic.Clients.Web3.DexToolsClient.Factories
                 cancellationToken);
         }
 
-        public static ICachedServiceFactory<IDexToolsClient> CreateNewManager(
+        public static CachedServiceFactoryManager<IDexToolsClient> CreateNewManager(
             CachedFactoryOptions options,
             ICachedServiceFactory<HttpClient> httpClientCachedFactory,
             IThreadRateLimiter rateLimiter,
