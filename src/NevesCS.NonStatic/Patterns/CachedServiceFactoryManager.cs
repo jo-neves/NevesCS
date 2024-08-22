@@ -20,7 +20,7 @@ namespace NevesCS.NonStatic.Patterns
         private readonly CancellationTokenSource InternalCancellationTokenSource;
         private readonly CancellationToken CancellationToken;
 
-        private readonly IManagedServiceFactory<TService> ServiceFactory;
+        private readonly ICachedServiceFactory<TService> ServiceFactory;
 
         private readonly ConcurrentDictionary<string, CacheItem> CachedItems = [];
 
@@ -28,7 +28,7 @@ namespace NevesCS.NonStatic.Patterns
 
         public CachedServiceFactoryManager(
             CachedFactoryOptions options,
-            IManagedServiceFactory<TService> serviceFactory,
+            ICachedServiceFactory<TService> serviceFactory,
             CancellationToken cancellationToken = default)
         {
             Options = ObjectUtils.ThrowIfNull(options, nameof(options));

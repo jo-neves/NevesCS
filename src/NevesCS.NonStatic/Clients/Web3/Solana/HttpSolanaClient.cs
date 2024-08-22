@@ -29,7 +29,7 @@ namespace NevesCS.NonStatic.Clients.Web3.Solana
             CancellationToken = cancellationToken;
         }
 
-        public async Task<bool> CheckForTransactionConfirmedAsync(string transactionSignature)
+        public async Task<bool> CheckAndWaitForTransactionConfirmedAsync(string transactionSignature)
         {
             var retryCount = 0;
 

@@ -6,7 +6,7 @@ using Solnet.Rpc;
 
 namespace NevesCS.NonStatic.Clients.Web3.Solana.Factories
 {
-    public sealed class HttpSolanaClientManagedFactory : IManagedServiceFactory<HttpSolanaClient>
+    public sealed class HttpSolanaClientCachedFactory : ICachedServiceFactory<HttpSolanaClient>
     {
         private readonly HttpSolanaClientOptions Options;
 
@@ -16,7 +16,7 @@ namespace NevesCS.NonStatic.Clients.Web3.Solana.Factories
 
         private readonly CancellationToken CancellationToken;
 
-        public HttpSolanaClientManagedFactory(
+        public HttpSolanaClientCachedFactory(
             HttpSolanaClientOptions options,
             ICachedServiceFactory<IRpcClient> rpcClientFactory,
             IJsonParser jsonParser,
@@ -42,7 +42,7 @@ namespace NevesCS.NonStatic.Clients.Web3.Solana.Factories
         {
             return new CachedServiceFactoryManager<HttpSolanaClient>(
                 cachedFactoryOptions,
-                new HttpSolanaClientManagedFactory(httpSolanaClientOptions, rpcClientFactory, jsonParser, cancellationToken),
+                new HttpSolanaClientCachedFactory(httpSolanaClientOptions, rpcClientFactory, jsonParser, cancellationToken),
                 cancellationToken);
         }
     }

@@ -6,13 +6,13 @@ using Solnet.Rpc;
 
 namespace NevesCS.NonStatic.Clients.Web3.Solana.Factories
 {
-    public sealed class SolnetRpcCientManagedFactory : IManagedServiceFactory<IRpcClient>
+    public sealed class SolnetRpcCientCachedFactory : ICachedServiceFactory<IRpcClient>
     {
         private readonly Cluster RpcClusterType;
 
         private readonly IHttpClientFactory HttpClientFactory;
 
-        public SolnetRpcCientManagedFactory(IHttpClientFactory httpClientFactory, Cluster rpcClusterType)
+        public SolnetRpcCientCachedFactory(IHttpClientFactory httpClientFactory, Cluster rpcClusterType)
         {
             HttpClientFactory = ObjectUtils.ThrowIfNull(httpClientFactory, nameof(httpClientFactory));
             RpcClusterType = ObjectUtils.ThrowIfNull(rpcClusterType, nameof(rpcClusterType));
@@ -33,7 +33,7 @@ namespace NevesCS.NonStatic.Clients.Web3.Solana.Factories
         {
             return new CachedServiceFactoryManager<IRpcClient>(
                 options,
-                new SolnetRpcCientManagedFactory(httpClientFactory, clusterType),
+                new SolnetRpcCientCachedFactory(httpClientFactory, clusterType),
                 cancellationToken);
         }
     }

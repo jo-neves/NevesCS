@@ -4,11 +4,11 @@ using NevesCS.Static.Utils;
 
 namespace NevesCS.NonStatic.Clients
 {
-    public sealed class HttpClientManagedFactory : IManagedServiceFactory<HttpClient>
+    public sealed class HttpClientCachedFactory : ICachedServiceFactory<HttpClient>
     {
         private readonly IHttpClientFactory HttpClientFactory;
 
-        public HttpClientManagedFactory(IHttpClientFactory httpClientFactory)
+        public HttpClientCachedFactory(IHttpClientFactory httpClientFactory)
         {
             HttpClientFactory = ObjectUtils.ThrowIfNull(httpClientFactory, nameof(httpClientFactory));
         }
@@ -25,7 +25,7 @@ namespace NevesCS.NonStatic.Clients
         {
             return new CachedServiceFactoryManager<HttpClient>(
                 options,
-                new HttpClientManagedFactory(httpClientFactory),
+                new HttpClientCachedFactory(httpClientFactory),
                 cancellationToken);
         }
     }

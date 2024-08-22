@@ -6,18 +6,18 @@ using NevesCS.Static.Utils;
 
 namespace NevesCS.NonStatic.Clients.Web3.DexToolsClient.Factories
 {
-    public sealed class DexToolsV1HttpClientManagedFactory : IManagedServiceFactory<IDexToolsClient>
+    public sealed class DexToolsV1HttpClientCachedFactory : ICachedServiceFactory<IDexToolsClient>
     {
         private readonly IThreadRateLimiter? ThreadRateLimiter;
 
         private readonly ICachedServiceFactory<HttpClient> HttpClientCachedFactory;
 
-        public DexToolsV1HttpClientManagedFactory(ICachedServiceFactory<HttpClient> httpClientCachedFactory)
+        public DexToolsV1HttpClientCachedFactory(ICachedServiceFactory<HttpClient> httpClientCachedFactory)
         {
             HttpClientCachedFactory = ObjectUtils.ThrowIfNull(httpClientCachedFactory, nameof(httpClientCachedFactory));
         }
 
-        public DexToolsV1HttpClientManagedFactory(
+        public DexToolsV1HttpClientCachedFactory(
             ICachedServiceFactory<HttpClient> httpClientCachedFactory,
             IThreadRateLimiter rateLimiter)
         {
@@ -39,7 +39,7 @@ namespace NevesCS.NonStatic.Clients.Web3.DexToolsClient.Factories
         {
             return new CachedServiceFactoryManager<IDexToolsClient>(
                 options,
-                new DexToolsV1HttpClientManagedFactory(httpClientCachedFactory),
+                new DexToolsV1HttpClientCachedFactory(httpClientCachedFactory),
                 cancellationToken);
         }
 
@@ -51,7 +51,7 @@ namespace NevesCS.NonStatic.Clients.Web3.DexToolsClient.Factories
         {
             return new CachedServiceFactoryManager<IDexToolsClient>(
                 options,
-                new DexToolsV1HttpClientManagedFactory(httpClientCachedFactory, rateLimiter),
+                new DexToolsV1HttpClientCachedFactory(httpClientCachedFactory, rateLimiter),
                 cancellationToken);
         }
     }

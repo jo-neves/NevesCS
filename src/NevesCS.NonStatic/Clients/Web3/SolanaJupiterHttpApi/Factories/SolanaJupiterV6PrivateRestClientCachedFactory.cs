@@ -8,8 +8,8 @@ using Solnet.Wallet;
 
 namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
 {
-    public sealed class SolanaJupiterV6PrivateRestClientManagedFactory
-        : IManagedServiceFactory<SolanaJupiterV6PrivateRestClient>
+    public sealed class SolanaJupiterV6PrivateRestClientCachedFactory
+        : ICachedServiceFactory<SolanaJupiterV6PrivateRestClient>
     {
         private readonly Wallet Wallet;
 
@@ -19,7 +19,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
 
         private readonly IJsonParser JsonParser;
 
-        public SolanaJupiterV6PrivateRestClientManagedFactory(
+        public SolanaJupiterV6PrivateRestClientCachedFactory(
             Wallet wallet,
             ICachedServiceFactory<HttpClient> httpClientCachedFactory,
             ICachedServiceFactory<IRpcClient> cachedRpcClientFactory,
@@ -50,7 +50,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
         {
             return new CachedServiceFactoryManager<SolanaJupiterV6PrivateRestClient>(
                 options,
-                new SolanaJupiterV6PrivateRestClientManagedFactory(
+                new SolanaJupiterV6PrivateRestClientCachedFactory(
                     wallet,
                     httpClientCachedFactory,
                     rpcClientCachedFactory,
