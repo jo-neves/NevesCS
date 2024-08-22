@@ -4,12 +4,12 @@ using NevesCS.Static.Utils;
 
 namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
 {
-    public sealed class SolanaJupiterV6PublicRestClientManagedFactory
-        : IManagedServiceFactory<SolanaJupiterV6PublicRestClient>
+    public sealed class SolanaJupiterV6PublicRestClientCachedFactory
+        : ICachedServiceFactory<SolanaJupiterV6PublicRestClient>
     {
         private readonly ICachedServiceFactory<HttpClient> HttpClientCachedFactory;
 
-        public SolanaJupiterV6PublicRestClientManagedFactory(ICachedServiceFactory<HttpClient> httpClientCachedFactory)
+        public SolanaJupiterV6PublicRestClientCachedFactory(ICachedServiceFactory<HttpClient> httpClientCachedFactory)
         {
             HttpClientCachedFactory = ObjectUtils.ThrowIfNull(httpClientCachedFactory, nameof(httpClientCachedFactory));
         }
@@ -26,7 +26,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
         {
             return new CachedServiceFactoryManager<SolanaJupiterV6PublicRestClient>(
                 options,
-                new SolanaJupiterV6PublicRestClientManagedFactory(httpClientCachedFactory),
+                new SolanaJupiterV6PublicRestClientCachedFactory(httpClientCachedFactory),
                 cancellationToken);
         }
     }
