@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using NevesCS.Abstractions.Traits;
 using NevesCS.Static.Constants;
-using NevesCS.Static.Utils.Sql.Functions;
+using NevesCS.Static.Utils.SqlBuilders.Functions;
 using NevesCS.Static.Utils.Vendor.EntityFramework.Constants;
 using NevesCS.Static.Utils.Vendor.EntityFramework.ValueConverters;
 
