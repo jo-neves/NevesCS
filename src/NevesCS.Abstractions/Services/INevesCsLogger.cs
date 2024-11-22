@@ -1,6 +1,6 @@
 namespace NevesCS.Abstractions.Services
 {
-    public interface INevesCsLogger
+    public interface INevesCsLogger : IDisposable
     {
         public void LogTrace(string content);
 

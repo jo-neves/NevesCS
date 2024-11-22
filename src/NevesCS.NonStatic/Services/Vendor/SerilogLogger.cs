@@ -16,6 +16,12 @@ namespace NevesCS.NonStatic.Services.Vendor
 
         private IDisposable? Scope { get; set; }
 
+        public void Dispose()
+        {
+            Scope?.Dispose();
+            GC.SuppressFinalize(this);
+        }
+
         public IDisposable? BeginScope<TState>(TState state) where TState : notnull
         {
             Scope = Logger.BeginScope(state);
@@ -65,12 +71,6 @@ namespace NevesCS.NonStatic.Services.Vendor
         public void LogWarning(string content)
         {
             Logger.LogWarning(content);
-        }
-
-        public void Dispose()
-        {
-            Scope?.Dispose();
-            GC.SuppressFinalize(this);
         }
     }
 }
