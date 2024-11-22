@@ -20,9 +20,9 @@ namespace NevesCS.Static.Extensions
             return DateTimeOffsetTimeZoneUtils.IsUtc(dateTime);
         }
 
-        public static DayOfWeek GetDayOfWeek(this DateTimeOffset utcDate, TimeZoneInfo timeZone)
+        public static DayOfWeek DayOfWeek(this DateTimeOffset utcDate, TimeZoneInfo timeZone)
         {
-            return DateTimeOffsetTimeZoneUtils.GetDayOfWeek(utcDate, timeZone);
+            return DateTimeOffsetTimeZoneUtils.DayOfWeek(utcDate, timeZone);
         }
 
         /// <summary>

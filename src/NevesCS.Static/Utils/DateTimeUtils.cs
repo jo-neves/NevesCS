@@ -85,17 +85,12 @@ namespace NevesCS.Static.Utils
 
         public static DateTimeOffset ToStartOfDay(DateTimeOffset date)
         {
-            return From(date)
-                .AddHours(-date.Hour)
-                .AddMinutes(-date.Minute)
-                .AddSeconds(-date.Second)
-                .AddMilliseconds(-date.Millisecond)
-                .AddMicroseconds(-date.Microsecond);
+            return From(date).Date;
         }
 
         public static DateTimeOffset ToEndOfDay(DateTimeOffset date)
         {
-            return ToStartOfDay(date).AddDays(Ints.One).AddTicks(-Ints.One);
+            return ToStartOfDay(date).AddDays(1).AddTicks(-1);
         }
 
         public static DateTimeOffset ToStartOfWeek(DateTimeOffset date)
@@ -107,22 +102,22 @@ namespace NevesCS.Static.Utils
                 case DayOfWeek.Monday:
                     break;
                 case DayOfWeek.Tuesday:
-                    newDateStartOfDay = newDateStartOfDay.AddDays(-Ints.One);
+                    newDateStartOfDay = newDateStartOfDay.AddDays(-1);
                     break;
                 case DayOfWeek.Wednesday:
-                    newDateStartOfDay = newDateStartOfDay.AddDays(-Ints.Two);
+                    newDateStartOfDay = newDateStartOfDay.AddDays(-2);
                     break;
                 case DayOfWeek.Thursday:
-                    newDateStartOfDay = newDateStartOfDay.AddDays(-Ints.Three);
+                    newDateStartOfDay = newDateStartOfDay.AddDays(-3);
                     break;
                 case DayOfWeek.Friday:
-                    newDateStartOfDay = newDateStartOfDay.AddDays(-Ints.Four);
+                    newDateStartOfDay = newDateStartOfDay.AddDays(-4);
                     break;
                 case DayOfWeek.Saturday:
-                    newDateStartOfDay = newDateStartOfDay.AddDays(-Ints.Five);
+                    newDateStartOfDay = newDateStartOfDay.AddDays(-5);
                     break;
                 case DayOfWeek.Sunday:
-                    newDateStartOfDay = newDateStartOfDay.AddDays(-Ints.Six);
+                    newDateStartOfDay = newDateStartOfDay.AddDays(-6);
                     break;
             }
 
