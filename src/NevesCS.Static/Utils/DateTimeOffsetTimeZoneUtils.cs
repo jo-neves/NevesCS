@@ -27,6 +27,12 @@ namespace NevesCS.Static.Utils
             return dateTime.Offset == TimeSpan.Zero;
         }
 
+        public static DayOfWeek DayOfWeek(DateTimeOffset utcDate, TimeZoneInfo timeZone)
+        {
+            var localDate = ToLocalDateTime(utcDate, timeZone);
+            return localDate.DayOfWeek;
+        }
+
         /// <summary>
         /// Checks if the given DateTimeOffset is the last day of the month in the specified time zone.
         ///
@@ -118,6 +124,16 @@ namespace NevesCS.Static.Utils
         public static DateTimeOffset ToStartOfDay(DateTimeOffset dateTime, TimeZoneInfo timeZone)
         {
             return ToUtc(DateTimeUtils.ToStartOfDay(ToLocalDateTime(dateTime, timeZone)), timeZone);
+        }
+
+        /// <summary>
+        /// Returns the UTC date corresponding to the end of day for the UTC date in accordance with local timezone. <br/>
+        /// This is a DST aware method.
+        ///
+        /// </summary>
+        public static DateTimeOffset ToEndOfDay(DateTimeOffset dateTime, TimeZoneInfo timeZone)
+        {
+            return ToUtc(DateTimeUtils.ToEndOfDay(ToLocalDateTime(dateTime, timeZone)), timeZone);
         }
 
         public static DateTimeOffset ToStartOfWeek(DateTimeOffset date, TimeZoneInfo timeZone)
