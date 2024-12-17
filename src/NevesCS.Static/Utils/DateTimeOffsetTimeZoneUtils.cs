@@ -27,7 +27,7 @@ namespace NevesCS.Static.Utils
             return dateTime.Offset == TimeSpan.Zero;
         }
 
-        public static DayOfWeek DayOfWeek(DateTimeOffset utcDate, TimeZoneInfo timeZone)
+        public static DayOfWeek GetDayOfWeek(DateTimeOffset utcDate, TimeZoneInfo timeZone)
         {
             var localDate = ToLocalDateTime(utcDate, timeZone);
             return localDate.DayOfWeek;
