@@ -31,20 +31,38 @@ namespace NevesCS.Static.Extensions.Vendor.EntityFramework
         public static EntityTypeBuilder<TEntity> ConfigurePropertyDecimalAsLong<TEntity>(
             this EntityTypeBuilder<TEntity> builder,
             Expression<Func<TEntity, decimal>> propertyExpression)
-            
+
             where TEntity : class
         {
             return EntityTypeBuilderUtils.ConfigurePropertyDecimalAsLong(builder, propertyExpression);
         }
 
-        public static EntityTypeBuilder<TEntity> ConfigurePropertyAsPositive<TEntity>(
+        /// <summary>
+        /// R≥0={x∈R∣x≥0}
+        ///
+        /// </summary>
+        public static EntityTypeBuilder<TEntity> ConfigurePropertyAsNonNegativeRealNumber<TEntity>(
             this EntityTypeBuilder<TEntity> builder,
             string tableName,
             string propertyName)
 
             where TEntity : class
         {
-            return EntityTypeBuilderUtils.ConfigurePropertyAsPositive(builder, tableName, propertyName);
+            return EntityTypeBuilderUtils.ConfigurePropertyAsNonNegativeRealNumber(builder, tableName, propertyName);
+        }
+
+        /// <summary>
+        /// R>0={x∈R∣x>0}
+        ///
+        /// </summary>
+        public static EntityTypeBuilder<TEntity> ConfigurePropertyAsPositiveRealNumber<TEntity>(
+            this EntityTypeBuilder<TEntity> builder,
+            string tableName,
+            string propertyName)
+
+            where TEntity : class
+        {
+            return EntityTypeBuilderUtils.ConfigurePropertyAsPositiveRealNumber(builder, tableName, propertyName);
         }
     }
 }

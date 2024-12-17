@@ -58,14 +58,34 @@ namespace NevesCS.Static.Utils.Vendor.EntityFramework
             return builder;
         }
 
-        public static EntityTypeBuilder<TEntity> ConfigurePropertyAsPositive<TEntity>(
+        /// <summary>
+        /// R≥0={x∈R∣x≥0}
+        ///
+        /// </summary>
+        public static EntityTypeBuilder<TEntity> ConfigurePropertyAsNonNegativeRealNumber<TEntity>(
             EntityTypeBuilder<TEntity> builder,
             string tableName,
             string propertyName)
 
             where TEntity : class
         {
-            builder.ToTable(t => TableBuilderUtils.ConfigurePropertyAsPositive(t, tableName, propertyName));
+            builder.ToTable(t => TableBuilderUtils.ConfigurePropertyAsNonNegativeRealNumber(t, tableName, propertyName));
+
+            return builder;
+        }
+
+        /// <summary>
+        /// R>0={x∈R∣x>0}
+        ///
+        /// </summary>
+        public static EntityTypeBuilder<TEntity> ConfigurePropertyAsPositiveRealNumber<TEntity>(
+            EntityTypeBuilder<TEntity> builder,
+            string tableName,
+            string propertyName)
+
+            where TEntity : class
+        {
+            builder.ToTable(t => TableBuilderUtils.ConfigurePropertyAsPositiveRealNumber(t, tableName, propertyName));
 
             return builder;
         }

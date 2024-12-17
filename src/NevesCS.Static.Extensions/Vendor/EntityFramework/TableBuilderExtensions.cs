@@ -6,14 +6,32 @@ namespace NevesCS.Static.Extensions.Vendor.EntityFramework
 {
     public static class TableBuilderExtensions
     {
-        public static TableBuilder<TEntity> ConfigurePropertyAsPositive<TEntity>(
+        /// <summary>
+        /// R≥0={x∈R∣x≥0}
+        ///
+        /// </summary>
+        public static TableBuilder<TEntity> ConfigurePropertyAsNonNegativeRealNumber<TEntity>(
             this TableBuilder<TEntity> builder,
             string tableName,
             string propertyName)
 
             where TEntity : class
         {
-            return TableBuilderUtils.ConfigurePropertyAsPositive(builder, tableName, propertyName);
+            return TableBuilderUtils.ConfigurePropertyAsNonNegativeRealNumber(builder, tableName, propertyName);
+        }
+
+        /// <summary>
+        /// R>0={x∈R∣x>0}
+        ///
+        /// </summary>
+        public static TableBuilder<TEntity> ConfigurePropertyAsPositiveRealNumber<TEntity>(
+            this TableBuilder<TEntity> builder,
+            string tableName,
+            string propertyName)
+
+            where TEntity : class
+        {
+            return TableBuilderUtils.ConfigurePropertyAsPositiveRealNumber(builder, tableName, propertyName);
         }
     }
 }
