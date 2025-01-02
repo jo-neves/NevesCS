@@ -53,6 +53,11 @@ namespace NevesCS.Static.Utils
             return DateTimeOffset.Now.Offset;
         }
 
+        public static DateOnly GetDateOnly(DateTime dateTime)
+        {
+            return DateOnly.FromDateTime(dateTime);
+        }
+
         public static DateTimeOffset SetTime(
             DateTimeOffset sourceDateTime,
             int hours,

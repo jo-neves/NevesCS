@@ -7,6 +7,11 @@ namespace NevesCS.Static.Extensions
 {
     public static class DateTimeExtensions
     {
+        public static DateOnly GetDateOnly(this DateTime dateTime)
+        {
+            return DateTimeUtils.GetDateOnly(dateTime);
+        }
+
         public static DateTimeOffset SetTime(
             this DateTimeOffset sourceDateTime,
             int hours,
