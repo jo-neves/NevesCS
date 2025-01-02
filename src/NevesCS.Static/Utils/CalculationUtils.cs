@@ -1,4 +1,3 @@
-using NevesCS.Static.Constants.Values;
 using System.Numerics;
 
 namespace NevesCS.Static.Utils
@@ -6,20 +5,30 @@ namespace NevesCS.Static.Utils
     public static class CalculationUtils
     {
         /// <summary>
-        /// Computes the average and returns 0 in case the source is null or empty (does not throw).
+        /// Computes the average, or returns 0 in case the source is null or empty (does not throw).
         ///
         /// </summary>
         public static decimal SafeAverage<T>(IEnumerable<T> source, Func<T, decimal> selector)
-            where T : INumber<T>
         {
             return source?.Any() != true
                 ? 0
                 : source.Average(selector);
         }
 
+        /// <summary>
+        /// Computes the sum, or returns 0 in case the source is null or empty (does not throw).
+        ///
+        /// </summary>
+        public static decimal SafeSum<T>(IEnumerable<T> source, Func<T, decimal> selector)
+        {
+            return source?.Any() != true
+                ? 0
+                : source.Sum(selector);
+        }
+
         public static bool IsEven(int value)
         {
-            return value % Ints.Two == Ints.Zero;
+            return value % 2 == 0;
         }
 
         /// <summary>
@@ -32,7 +41,7 @@ namespace NevesCS.Static.Utils
         {
             return percentage is < 0 or > 100
                 ? throw new ArgumentOutOfRangeException(nameof(percentage))
-                : SubtractFractionalPercentage(total, percentage / Ints.OneHundred);
+                : SubtractFractionalPercentage(total, percentage / 100);
         }
 
         /// <summary>
@@ -57,7 +66,7 @@ namespace NevesCS.Static.Utils
         {
             return total == 0
                 ? throw new ArgumentOutOfRangeException(nameof(total))
-                : (part * Ints.OneHundred) / total;
+                : (part * 100) / total;
         }
 
         /// <summary>
@@ -69,22 +78,22 @@ namespace NevesCS.Static.Utils
         {
             return total == 0
                 ? throw new ArgumentOutOfRangeException(nameof(total))
-                : PercentageOfTotal(part, total) / Ints.OneHundred;
+                : PercentageOfTotal(part, total) / 100;
         }
 
         public static int Concat(int left, int right)
         {
-            return (left * ((int)Math.Pow(Ints.Ten, DigitCount(right)))) + right;
+            return (left * ((int)Math.Pow(10, DigitCount(right)))) + right;
         }
 
         public static int DigitCount(int value)
         {
-            var counter = Ints.One;
-            var widthMeter = Ints.Ten;
+            var counter = 1;
+            var widthMeter = 10;
 
             while (widthMeter <= value)
             {
-                widthMeter *= Ints.Ten;
+                widthMeter *= 10;
                 ++counter;
             }
 

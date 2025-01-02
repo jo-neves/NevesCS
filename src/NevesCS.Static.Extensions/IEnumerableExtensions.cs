@@ -9,6 +9,24 @@ namespace NevesCS.Static.Extensions
             IEnumerableUtils.ForEach(enumeration, action);
         }
 
+        /// <summary>
+        /// Computes the average, or returns 0 in case the source is null or empty (does not throw).
+        ///
+        /// </summary>
+        public static decimal SafeAverage<T>(this IEnumerable<T> source, Func<T, decimal> selector)
+        {
+            return CalculationUtils.SafeAverage(source, selector);
+        }
+
+        /// <summary>
+        /// Computes the sum, or returns 0 in case the source is null or empty (does not throw).
+        ///
+        /// </summary>
+        public static decimal SafeSum<T>(this IEnumerable<T> source, Func<T, decimal> selector)
+        {
+            return CalculationUtils.SafeSum(source, selector);
+        }
+
         public static bool None<T>(this IEnumerable<T> enumeration)
         {
             return IEnumerableUtils.None(enumeration);

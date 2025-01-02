@@ -29,11 +29,5 @@ namespace NevesCS.Static.Extensions
         {
             return CalculationUtils.Divide(left, right);
         }
-
-        public static decimal SafeAverage<TSource>(this IEnumerable<TSource> source, Func<TSource, decimal> selector)
-            where TSource : INumber<TSource>
-        {
-            return CalculationUtils.SafeAverage(source, selector);
-        }
     }
 }
