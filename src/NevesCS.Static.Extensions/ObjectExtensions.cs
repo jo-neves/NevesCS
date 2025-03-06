@@ -9,6 +9,11 @@ namespace NevesCS.Static.Extensions
             return ObjectUtils.IsNull(@object);
         }
 
+        public static bool IsNotNull<T>(this T? @object)
+        {
+            return ObjectUtils.IsNotNull(@object);
+        }
+
         public static bool IsNullOrDefault<T>(this T? @object)
         {
             return ObjectUtils.IsNullOrDefault(@object);
