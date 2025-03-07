@@ -34,7 +34,7 @@ namespace NevesCS.Static.Extensions
             return ObjectUtils.AssertNotNull(@object, parameterName);
         }
 
-        public static bool IsIn<TIn>(this TIn? @object, IEnumerable<TIn> target)
+        public static bool IsIn<TIn>(this TIn? @object, params TIn[] target)
         {
             return target.Contains(@object);
         }
