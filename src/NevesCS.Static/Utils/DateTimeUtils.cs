@@ -90,7 +90,7 @@ namespace NevesCS.Static.Utils
 
         public static DateTimeOffset ToStartOfDay(DateTimeOffset date)
         {
-            return From(date).Date;
+            return From(date.Date, date.Offset);
         }
 
         public static DateTimeOffset ToEndOfDay(DateTimeOffset date)
