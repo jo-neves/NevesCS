@@ -95,7 +95,7 @@ namespace NevesCS.Static.Utils
 
         public static DateTimeOffset ToEndOfDay(DateTimeOffset date)
         {
-            return ToStartOfDay(date).AddDays(1).AddTicks(-1);
+            return ToStartOfDay(date).AddDays(1).AddMilliseconds(-1);
         }
 
         public static DateTimeOffset ToStartOfWeek(DateTimeOffset date)

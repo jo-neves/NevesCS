@@ -128,7 +128,8 @@ namespace NevesCS.Tests.Static
         {
             var startDate = new DateTimeOffset(sourceEndYear, sourceEndMonth, sourceEndDay, sourceEndHour, sourceEndMinute, sourceEndSecond, DbTimeSpan);
 
-            startDate.ToEndOfDay(TimeZones.London)
+            startDate
+                .ToEndOfDay(TimeZones.London)
                 .Should()
                 .Be(new DateTimeOffset(
                     expectedEndYear,
