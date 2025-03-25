@@ -14,6 +14,11 @@ namespace NevesCS.Static.Extensions
             return ObjectUtils.IsNotNull(@object);
         }
 
+        public static bool IsNotNullNorDefault<T>(this T? @object)
+        {
+            return ObjectUtils.IsNotNullNorDefault(@object);
+        }
+
         public static bool IsNullOrDefault<T>(this T? @object)
         {
             return ObjectUtils.IsNullOrDefault(@object);
@@ -37,6 +42,11 @@ namespace NevesCS.Static.Extensions
         public static bool IsIn<TIn>(this TIn? @object, params TIn[] target)
         {
             return target.Contains(@object);
+        }
+
+        public static bool IsNotIn<TIn>(this TIn? @object, params TIn[] target)
+        {
+            return !IsIn(@object, target);
         }
 
         public static TOut? CastAs<TOut>(this object @object)
