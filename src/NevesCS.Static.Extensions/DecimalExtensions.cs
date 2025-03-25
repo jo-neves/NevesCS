@@ -14,9 +14,9 @@ namespace NevesCS.Static.Extensions
         /// E.g.: 150.SubtractPercentage(20) == 30
         ///
         /// </summary>
-        public static decimal SubtractPercentage(this decimal part, decimal total)
+        public static decimal SubtractPercentage(this decimal total, decimal percentage)
         {
-            return CalculationUtils.SubtractPercentage(part, total);
+            return CalculationUtils.SubtractPercentage(total, percentage);
         }
 
         /// <summary>
@@ -24,9 +24,9 @@ namespace NevesCS.Static.Extensions
         /// E.g.: 150.SubtractFractionalPercentage(0.20) == 30
         ///
         /// </summary>
-        public static decimal SubtractFractionalPercentage(this decimal part, decimal total)
+        public static decimal SubtractFractionalPercentage(this decimal total, decimal fractionalPercentage)
         {
-            return CalculationUtils.SubtractFractionalPercentage(part, total);
+            return CalculationUtils.SubtractFractionalPercentage(total, fractionalPercentage);
         }
 
         /// <summary>
@@ -34,9 +34,9 @@ namespace NevesCS.Static.Extensions
         /// E.g.: 10.PercentageOfTotal(100) == 10
         ///
         /// </summary>
-        public static decimal PercentageOfTotal(this decimal part, decimal total)
+        public static decimal PercentageOfTotal(this decimal part, decimal percentage)
         {
-            return CalculationUtils.PercentageOfTotal(part, total);
+            return CalculationUtils.PercentageOfTotal(part, percentage);
         }
 
         /// <summary>
@@ -44,9 +44,9 @@ namespace NevesCS.Static.Extensions
         /// E.g.: 10.FractionalPercentageOfTotal(100) == 0.10
         ///
         /// </summary>
-        public static decimal FractionalPercentageOfTotal(this decimal part, decimal total)
+        public static decimal FractionalPercentageOfTotal(this decimal part, decimal percentage)
         {
-            return CalculationUtils.FractionalPercentageOfTotal(part, total);
+            return CalculationUtils.FractionalPercentageOfTotal(part, percentage);
         }
     }
 }
