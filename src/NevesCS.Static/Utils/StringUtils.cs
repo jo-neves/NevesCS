@@ -1,75 +1,56 @@
 using System.Diagnostics;
 
-namespace NevesCS.Static.Utils;
-
-public static class StringUtils
+namespace NevesCS.Static.Utils
 {
-    public static string CloneIntoNew(string source)
+    public static class StringUtils
     {
-        return new string(source);
-    }
-
-    public static string ThrowIfNullOrEmpty(string? @string, string parameterName)
-    {
-        if (string.IsNullOrEmpty(@string))
+        public static string CloneIntoNew(string source)
         {
-            throw new ArgumentNullException(parameterName);
+            return new string(source);
         }
 
-        return @string!;
-    }
-
-    public static string AssertIfNullOrEmpty(string? @string, string parameterName)
-    {
-        Debug.Assert(!string.IsNullOrEmpty(@string), parameterName);
-
-        return @string!;
-    }
-
-    public static string ThrowIfNullOrWhiteSpace(string? @string, string parameterName)
-    {
-        if (string.IsNullOrWhiteSpace(@string))
+        public static string ThrowIfNullOrEmpty(string? @string, string parameterName)
         {
-            throw new ArgumentNullException(parameterName);
+            if (string.IsNullOrEmpty(@string))
+            {
+                throw new ArgumentNullException(parameterName);
+            }
+
+            return @string!;
         }
 
-        return @string!;
-    }
-
-    public static string AssertIfNullOrWhiteSpace(string? @string, string parameterName)
-    {
-        Debug.Assert(string.IsNullOrWhiteSpace(@string), parameterName);
-
-        return @string!;
-    }
-
-    public static string OrIfNullOrEmpty(string? target, string defaultValue)
-    {
-        if (!string.IsNullOrEmpty(target))
+        public static string AssertIfNullOrEmpty(string? @string, string parameterName)
         {
-            return target!;
+            Debug.Assert(!string.IsNullOrEmpty(@string), parameterName);
+
+            return @string!;
         }
 
-        return defaultValue;
-    }
-
-    public static string OrIfNullOrWhiteSpace(string? target, string defaultValue)
-    {
-        if (!string.IsNullOrWhiteSpace(target))
+        public static string ThrowIfNullOrWhiteSpace(string? @string, string parameterName)
         {
-            return target!;
+            if (string.IsNullOrWhiteSpace(@string))
+            {
+                throw new ArgumentNullException(parameterName);
+            }
+
+            return @string!;
         }
 
-        return defaultValue;
-    }
+        public static string AssertIfNullOrWhiteSpace(string? @string, string parameterName)
+        {
+            Debug.Assert(string.IsNullOrWhiteSpace(@string), parameterName);
 
-    public static bool EqualsIgnoreCase(string? source, string target)
-    {
-        return source?.Equals(target, StringComparison.OrdinalIgnoreCase) == true;
-    }
+            return @string!;
+        }
 
-    public static Guid HashIntoGuid(string source)
-    {
-        return GuidUtils.HashStringIntoGuid(source);
+        public static bool EqualsIgnoreCase(string? source, string target)
+        {
+            return source?.Equals(target, StringComparison.OrdinalIgnoreCase) == true;
+        }
+
+        public static Guid HashIntoGuid(string source)
+        {
+            return GuidUtils.HashStringIntoGuid(source);
+        }
     }
 }
