@@ -19,6 +19,11 @@ namespace NevesCS.Static.Utils
             return IsNull(@object) || Equals(@object, default(T?));
         }
 
+        public static bool IsNotNullNorDefault<T>(T? @object)
+        {
+            return !IsNull(@object) && !Equals(@object, default(T?));
+        }
+
         public static T ThrowIfNull<T>(T? @object, Type type)
         {
             if (IsNull(@object))
