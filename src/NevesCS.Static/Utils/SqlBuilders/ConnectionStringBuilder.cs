@@ -7,25 +7,22 @@ namespace NevesCS.Static.Utils.SqlBuilders
         ///
         /// </summary>
         /// <param name="dataSource">The location.</param>
-        /// <param name="storeGuidAsText">GUIDs are stored in a binary format by default.</param>
         /// <param name="failIfMissing">If the database file doesn't exist, the default behaviour is to create a new file.</param>
         /// <param name="readOnly">Read only connection.</param>
         /// <returns></returns>
-        public static string BuildSqlLiteV3(
+        public static string BuildSQLiteAdoNet(
             string dataSource,
-            bool storeGuidAsText,
             bool failIfMissing,
             bool readOnly,
             string? password = default)
         {
-            return $"Data Source=${dataSource};Version=3;" +
+            return $"Data Source=${dataSource};" +
                    (password == default ? "" : $"Password={password};") +
-                   (storeGuidAsText ? "BinaryGUID=False;" : "") +
-                   (readOnly ? "Read Only=True;" : "") +
-                   (failIfMissing ? "FailIfMissing=True;" : "");
+                   (readOnly ? "Mode=ReadOnly;" : "") +
+                   (failIfMissing ? "Mode=ReadWrite;" : "");
         }
 
-        public static string AppendToSqlLiteV3DataSource(string connectionString, string appender)
+        public static string AppendToSQLiteAdoNetDataSource(string connectionString, string appender)
         {
             var part1 = connectionString.Split("Data Source=");
             var part2 = part1[1].Split(";");
