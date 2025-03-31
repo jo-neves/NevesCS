@@ -3,23 +3,24 @@ namespace NevesCS.Static.Utils.SqlBuilders
     public static class ConnectionStringBuilder
     {
         /// <summary>
-        /// E.g.: "Data Source=c:\mydb.db;Version=3;Password=myPassword;"
+        /// E.g.: "Data Source=c:\mydb.db;Version=3;Password=myPassword;" <br/>
+        /// <seealso href="https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/compare#connection-strings"/>
         ///
         /// </summary>
         /// <param name="dataSource">The location.</param>
         /// <param name="failIfMissing">If the database file doesn't exist, the default behaviour is to create a new file.</param>
         /// <param name="readOnly">Read only connection.</param>
-        /// <returns></returns>
+        /// <param name="password">Pass 'null' to use no password.</param>
         public static string BuildSQLiteAdoNet(
             string dataSource,
             bool failIfMissing,
             bool readOnly,
-            string? password = default)
+            string? password)
         {
-            return $"Data Source=${dataSource};" +
-                   (password == default ? "" : $"Password={password};") +
+            return $"Data Source={dataSource};" +
+                   (password == null ? "" : $"Password={password};") +
                    (readOnly ? "Mode=ReadOnly;" : "") +
-                   (failIfMissing ? "Mode=ReadWrite;" : "");
+                   (failIfMissing ? "Mode=ReadWrite;" : "Mode=ReadWriteCreate");
         }
 
         public static string AppendToSQLiteAdoNetDataSource(string connectionString, string appender)
