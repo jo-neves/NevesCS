@@ -40,9 +40,39 @@ namespace NevesCS.Static.Utils
                                                          ? (MemberExpression)unaryLambdaExpression.Operand
                                                          : (MemberExpression)lambdaExpression.Body)
                                                      .Member,
-
                 _ => null,
             };
+        }
+
+        /// <summary>
+        /// Performs a search through all types in an external assembly, filtering by a predicate.
+        ///
+        /// </summary>
+        /// <param name="assemblyPath">E.g.: "path/to/your/project.dll"</param>
+        /// <param name="wherePredicate"></param>
+        /// <returns></returns>
+        public static IEnumerable<Type> GetAllTypesFromExternalAssembly(string assemblyPath, Func<Type, bool> wherePredicate)
+        {
+            var assembly = Assembly.LoadFrom(assemblyPath);
+
+            return assembly
+                .GetTypes()
+                .Where(wherePredicate);
+        }
+
+        /// <summary>
+        /// Performs a search through all types in the assembly that contains <typeparamref name="KnownType"/>, filtering by a predicate.
+        ///
+        /// </summary>
+        /// <typeparam name="KnownType">A known type from the assembly to perform the search in.</typeparam>
+        /// <param name="wherePredicate"></param>
+        /// <returns></returns>
+        public static IEnumerable<Type> GetAllTypesFrom<KnownType>(Func<Type, bool> wherePredicate)
+        {
+            return typeof(KnownType)
+                .Assembly
+                .GetTypes()
+                .Where(wherePredicate);
         }
 
         /// <summary>
@@ -50,7 +80,7 @@ namespace NevesCS.Static.Utils
         ///
         /// </summary>
         /// <typeparam name="KnownType">A known type embedded in the Assembly where the <paramref name="typeName"/> belongs to.</typeparam>
-        public static Type GetTypeFrom<KnownType>(string typeName)
+        public static Type GetTypeByNameFrom<KnownType>(string typeName)
         {
             return typeof(KnownType).Assembly.DefinedTypes
                 .First(type => type.Name == typeName)

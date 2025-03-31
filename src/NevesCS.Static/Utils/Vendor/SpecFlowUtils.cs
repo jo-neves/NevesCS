@@ -18,7 +18,7 @@ namespace NevesCS.Static.Utils.Vendor
         /// <returns></returns>
         public static object? CreateInstanceByTypeName<KnownType>(Table table, string typeName)
         {
-            var modelType = ReflectionUtils.GetTypeFrom<KnownType>(typeName);
+            var modelType = ReflectionUtils.GetTypeByNameFrom<KnownType>(typeName);
 
             return CallFirstCreateInstanceMethodInfo(GetFirstCreateInstanceMethodInfo(table, modelType)!, table);
         }
