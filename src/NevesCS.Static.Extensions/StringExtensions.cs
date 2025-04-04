@@ -29,6 +29,24 @@ namespace NevesCS.Static.Extensions
             return StringUtils.AssertIfNullOrWhiteSpace(@object, parameterName);
         }
 
+        /// <summary>
+        /// Returns <paramref name="target"/>, or <paramref name="defaultValue"/> if <typeparamref name="null"/> or empty.
+        ///
+        /// </summary>
+        public static string OrIfNullOrEmpty(this string? target, string defaultValue)
+        {
+            return StringUtils.OrIfNullOrEmpty(target, defaultValue);
+        }
+
+        /// <summary>
+        /// Returns <paramref name="target"/>, or <paramref name="defaultValue"/> if <typeparamref name="null"/> or white space.
+        ///
+        /// </summary>
+        public static string OrIfNullOrWhiteSpace(this string? target, string defaultValue)
+        {
+            return StringUtils.OrIfNullOrWhiteSpace(target, defaultValue);
+        }
+
         public static bool EqualsIgnoreCase(this string? source, string target)
         {
             return StringUtils.EqualsIgnoreCase(source, target);
