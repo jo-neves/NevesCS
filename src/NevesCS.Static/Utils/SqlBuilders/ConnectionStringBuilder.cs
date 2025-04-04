@@ -3,7 +3,7 @@ namespace NevesCS.Static.Utils.SqlBuilders
     public static class ConnectionStringBuilder
     {
         /// <summary>
-        /// E.g.: "Data Source=c:\mydb.db;Version=3;Password=myPassword;" <br/>
+        /// E.g.: "Data Source=c:\mydb.db;Password=myPassword;Mode=ReadWriteCreate" <br/>
         /// <seealso href="https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/compare#connection-strings"/>
         ///
         /// </summary>
@@ -20,7 +20,7 @@ namespace NevesCS.Static.Utils.SqlBuilders
             return $"Data Source={dataSource};" +
                    (password == null ? "" : $"Password={password};") +
                    (readOnly ? "Mode=ReadOnly;" : "") +
-                   (failIfMissing ? "Mode=ReadWrite;" : "Mode=ReadWriteCreate");
+                   (failIfMissing ? "Mode=ReadWrite;" : "Mode=ReadWriteCreate;");
         }
 
         public static string AppendToSQLiteAdoNetDataSource(string connectionString, string appender)
