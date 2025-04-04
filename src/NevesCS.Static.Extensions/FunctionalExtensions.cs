@@ -24,12 +24,21 @@ namespace NevesCS.Static.Extensions
         }
 
         /// <summary>
-        /// Handles the null by not throwing it, and executes <paramref name="factoryFunction"/>.
+        /// Returns <paramref name="target"/>, or executes <paramref name="factoryFunction"/> if <typeparamref name="null"/>.
         ///
         /// </summary>
         public static T? OrIfNull<T>(this T? target, Func<T> factoryFunction)
         {
             return FunctionalUtils.OrIfNull(target, factoryFunction);
+        }
+
+        /// <summary>
+        /// Returns <paramref name="target"/>, or <paramref name="defaultValue"/> if <typeparamref name="null"/>.
+        ///
+        /// </summary>
+        public static T? OrIfNull<T>(this T? target, T defaultValue)
+        {
+            return FunctionalUtils.OrIfNull(target, defaultValue);
         }
     }
 }
