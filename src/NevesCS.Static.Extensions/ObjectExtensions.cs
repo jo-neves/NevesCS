@@ -44,7 +44,17 @@ namespace NevesCS.Static.Extensions
             return target.Contains(@object);
         }
 
+        public static bool IsIn<TIn>(this TIn? @object, IEnumerable<TIn> target)
+        {
+            return target.Contains(@object);
+        }
+
         public static bool IsNotIn<TIn>(this TIn? @object, params TIn[] target)
+        {
+            return !IsIn(@object, target);
+        }
+
+        public static bool IsNotIn<TIn>(this TIn? @object, IEnumerable<TIn> target)
         {
             return !IsIn(@object, target);
         }
