@@ -75,6 +75,13 @@ namespace NevesCS.Static.Utils
                 .Where(wherePredicate);
         }
 
+        public static Type GetTypeByNameFromAssembly(Assembly assembly, string typeName)
+        {
+            return assembly
+                .GetTypes()
+                .First(type => type.Name == typeName);
+        }
+
         /// <summary>
         /// Gets a specific Type by name, supporting external assemblies.
         ///
@@ -82,9 +89,24 @@ namespace NevesCS.Static.Utils
         /// <typeparam name="KnownType">A known type embedded in the Assembly where the <paramref name="typeName"/> belongs to.</typeparam>
         public static Type GetTypeByNameFrom<KnownType>(string typeName)
         {
-            return typeof(KnownType).Assembly.DefinedTypes
+            return typeof(KnownType)
+                .Assembly
+                .DefinedTypes
                 .First(type => type.Name == typeName)
                 .AsType();
+        }
+
+        /// <summary>
+        /// Gets a specific Type by name from an external assembly.
+        ///
+        /// </summary>
+        public static Type GetTypeByNameFromExternalAssembly(string assemblyPath, string typeName)
+        {
+            var assembly = Assembly.LoadFrom(assemblyPath);
+
+            return assembly
+                .GetTypes()
+                .First(type => type.Name == typeName);
         }
 
         /// <summary>
