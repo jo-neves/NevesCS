@@ -43,6 +43,26 @@ namespace NevesCS.Static.Utils
             return @string!;
         }
 
+        public static string OrIfNullOrEmpty(string? target, string defaultValue)
+        {
+            if (!string.IsNullOrEmpty(target))
+            {
+                return target!;
+            }
+
+            return defaultValue;
+        }
+
+        public static string OrIfNullOrWhiteSpace(string? target, string defaultValue)
+        {
+            if (!string.IsNullOrWhiteSpace(target))
+            {
+                return target!;
+            }
+
+            return defaultValue;
+        }
+
         public static bool EqualsIgnoreCase(string? source, string target)
         {
             return source?.Equals(target, StringComparison.OrdinalIgnoreCase) == true;
