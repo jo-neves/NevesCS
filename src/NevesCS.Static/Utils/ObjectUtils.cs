@@ -51,6 +51,13 @@ namespace NevesCS.Static.Utils
             return @object!;
         }
 
+        public static T AssertTrue<T>(T @object, bool test, string message)
+        {
+            Debug.Assert(test, message);
+
+            return @object;
+        }
+
         public static TOut? CastAs<TOut>(object @object)
         {
             return @object is not TOut ? default : (TOut)@object;
