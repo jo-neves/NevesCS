@@ -12,5 +12,7 @@ namespace NevesCS.Static.Constants.Values
         public const string Minus = "-";
 
         public const string Equal = "=";
+
+        public static string EmptyGuid { get; } = Guid.Empty.ToString();
     }
 }
