@@ -39,6 +39,11 @@ namespace NevesCS.Static.Extensions
             return ObjectUtils.AssertNotNull(@object, parameterName);
         }
 
+        public static T AssertTrue<T>(this T @object, bool test, string message)
+        {
+            return ObjectUtils.AssertTrue(@object, test, message);
+        }
+
         public static bool IsIn<TIn>(this TIn? @object, params TIn[] target)
         {
             return target.Contains(@object);
