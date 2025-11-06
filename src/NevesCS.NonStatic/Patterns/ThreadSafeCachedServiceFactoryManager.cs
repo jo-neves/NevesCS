@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 
 using NevesCS.Abstractions.Interfaces;
 using NevesCS.NonStatic.Clients;
+using NevesCS.NonStatic.Collections;
 using NevesCS.Static.Utils;
 
 namespace NevesCS.NonStatic.Patterns;
@@ -13,6 +14,8 @@ public class ThreadSafeCachedServiceFactoryManager<TService> : IThreadSafeCached
     private readonly CancellationToken CancellationToken;
 
     private readonly ConcurrentDictionary<string, SemaphoreSlim> _KeyLocks = new();
+
+    private readonly ConcurrentHashSet<string> ThreadsInUse = new();
 
     public ThreadSafeCachedServiceFactoryManager(
         CachedFactoryOptions options,
@@ -38,17 +41,19 @@ public class ThreadSafeCachedServiceFactoryManager<TService> : IThreadSafeCached
             semaphore.Value.Dispose();
         }
 
+        ThreadsInUse.Dispose();
+
         GC.SuppressFinalize(this);
     }
 
-    public async Task<TOut> CreateAsync<TOut>(string key, Func<TService, TOut> inUse)
+    public async Task CreateAsync(string key, Action<TService> inUse)
     {
         var semaphore = _KeyLocks.GetOrAdd(key, _ => new SemaphoreSlim(1, 1));
         await semaphore.WaitAsync(CancellationToken).ConfigureAwait(false);
 
         try
         {
-            return inUse(CachedServiceFactoryManager.Create(key));
+            inUse(CachedServiceFactoryManager.Create(key));
         }
         catch (Exception)
         {
@@ -60,14 +65,14 @@ public class ThreadSafeCachedServiceFactoryManager<TService> : IThreadSafeCached
         }
     }
 
-    public async Task<TOut> CreateAsync<TOut>(string key, Func<TService, Task<TOut>> inUseAsync)
+    public async Task CreateAsync(string key, Func<TService, Task<bool>> inUseAsync)
     {
         var semaphore = _KeyLocks.GetOrAdd(key, _ => new SemaphoreSlim(1, 1));
         await semaphore.WaitAsync(CancellationToken).ConfigureAwait(false);
 
         try
         {
-            return await inUseAsync(CachedServiceFactoryManager.Create(key));
+            await inUseAsync(CachedServiceFactoryManager.Create(key));
         }
         catch (Exception)
         {

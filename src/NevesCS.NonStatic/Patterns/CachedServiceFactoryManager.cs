@@ -64,11 +64,6 @@ namespace NevesCS.NonStatic.Patterns
                 {
                     await Task.Delay(Options.CheckExpiredCacheItemsEvery, CancellationToken);
 
-                    if (CancellationToken.IsCancellationRequested)
-                    {
-                        break;
-                    }
-
                     CheckAndDeleteExpiredCacheItems();
                 }
             });

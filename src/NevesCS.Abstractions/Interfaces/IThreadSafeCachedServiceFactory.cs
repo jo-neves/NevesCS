@@ -2,7 +2,7 @@ namespace NevesCS.Abstractions.Interfaces;
 
 public interface IThreadSafeCachedServiceFactory<TService>
 {
-    public Task<TOut> CreateAsync<TOut>(string key, Func<TService, TOut> inUse);
+    public Task CreateAsync(string key, Action<TService> inUse);
 
-    public Task<TOut> CreateAsync<TOut>(string key, Func<TService, Task<TOut>> inUseAsync);
+    public Task CreateAsync(string key, Func<TService, Task<bool>> inUseAsync);
 }
