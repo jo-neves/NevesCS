@@ -23,12 +23,12 @@ public class BinanceRestClientCachedFactory : ICachedServiceFactory<BinanceRestC
             o => o.ApiCredentials = new ApiCredentials(Options.ApiKey, Options.ApiSecret));
     }
 
-    public static IThreadSafeCachedServiceFactory<BinanceRestClient> CreateNewManager(
+    public static ICachedServiceFactory<BinanceRestClient> CreateNewManager(
             CachedFactoryOptions cacheOptions,
             BinanceRestClientCachedFactoryOptions serviceOptions,
             CancellationToken cancellationToken)
     {
-        return new ThreadSafeCachedServiceFactoryManager<BinanceRestClient>(
+        return new CachedServiceFactoryManager<BinanceRestClient>(
             cacheOptions,
             new BinanceRestClientCachedFactory(serviceOptions),
             cancellationToken);
