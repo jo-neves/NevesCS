@@ -10,7 +10,7 @@ namespace NevesCS.NonStatic.Clients
 
         public HttpClientCachedFactory(IHttpClientFactory httpClientFactory)
         {
-            HttpClientFactory = ObjectUtils.ThrowIfNull(httpClientFactory, nameof(httpClientFactory));
+            HttpClientFactory = ObjectUtils.AssertNotNull(httpClientFactory, nameof(httpClientFactory));
         }
 
         public HttpClient Create(string key)
