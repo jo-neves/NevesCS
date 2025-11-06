@@ -4,7 +4,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/joao-neves95/NevesCS</RepositoryUrl>
 
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
