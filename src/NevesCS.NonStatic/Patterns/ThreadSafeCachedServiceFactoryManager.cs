@@ -46,14 +46,14 @@ public class ThreadSafeCachedServiceFactoryManager<TService> : IThreadSafeCached
         GC.SuppressFinalize(this);
     }
 
-    public async Task CreateAsync(string key, Action<TService> inUse)
+    public async Task<TOut> CreateAsync<TOut>(string key, Func<TService, TOut> inUse)
     {
         var semaphore = _KeyLocks.GetOrAdd(key, _ => new SemaphoreSlim(1, 1));
         await semaphore.WaitAsync(CancellationToken).ConfigureAwait(false);
 
         try
         {
-            inUse(CachedServiceFactoryManager.Create(key));
+            return inUse(CachedServiceFactoryManager.Create(key));
         }
         catch (Exception)
         {
@@ -65,14 +65,14 @@ public class ThreadSafeCachedServiceFactoryManager<TService> : IThreadSafeCached
         }
     }
 
-    public async Task CreateAsync(string key, Func<TService, Task<bool>> inUseAsync)
+    public async Task<TOut> CreateAsync<TOut>(string key, Func<TService, Task<TOut>> inUseAsync)
     {
         var semaphore = _KeyLocks.GetOrAdd(key, _ => new SemaphoreSlim(1, 1));
         await semaphore.WaitAsync(CancellationToken).ConfigureAwait(false);
 
         try
         {
-            await inUseAsync(CachedServiceFactoryManager.Create(key));
+            return await inUseAsync(CachedServiceFactoryManager.Create(key));
         }
         catch (Exception)
         {
