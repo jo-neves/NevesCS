@@ -15,8 +15,6 @@ public class ThreadSafeCachedServiceFactoryManager<TService> : IThreadSafeCached
 
     private readonly ConcurrentDictionary<string, SemaphoreSlim> _KeyLocks = new();
 
-    private readonly ConcurrentHashSet<string> ThreadsInUse = new();
-
     public ThreadSafeCachedServiceFactoryManager(
         CachedFactoryOptions options,
         ICachedServiceFactory<TService> serviceFactory,
@@ -40,8 +38,6 @@ public class ThreadSafeCachedServiceFactoryManager<TService> : IThreadSafeCached
         {
             semaphore.Value.Dispose();
         }
-
-        ThreadsInUse.Dispose();
 
         GC.SuppressFinalize(this);
     }
