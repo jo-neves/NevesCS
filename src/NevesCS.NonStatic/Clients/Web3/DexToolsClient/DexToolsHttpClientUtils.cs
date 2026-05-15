@@ -8,7 +8,7 @@ namespace NevesCS.NonStatic.Clients.Web3.DexToolsClient
 {
     internal static class DexToolsHttpClientUtils
     {
-        public static async Task<TResult> TryGetOrThrowAsync<TResult>(
+        public static async Task<TResult?> TryGetOrThrowAsync<TResult>(
             HttpClient httpClient,
             string requestUri,
             CancellationToken cancellationToken)

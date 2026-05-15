@@ -1,5 +1,7 @@
 using System.Numerics;
 
+using NevesCS.Static.Constants.Values;
+
 namespace NevesCS.Static.Utils
 {
     public static class CalculationUtils
@@ -11,7 +13,7 @@ namespace NevesCS.Static.Utils
         public static decimal SafeAverage<T>(IEnumerable<T> source, Func<T, decimal> selector)
         {
             return source?.Any() != true
-                ? 0
+                ? Ints.Zero
                 : source.Average(selector);
         }
 
@@ -22,13 +24,13 @@ namespace NevesCS.Static.Utils
         public static decimal SafeSum<T>(IEnumerable<T> source, Func<T, decimal> selector)
         {
             return source?.Any() != true
-                ? 0
+                ? Ints.Zero
                 : source.Sum(selector);
         }
 
         public static bool IsEven(int value)
         {
-            return value % 2 == 0;
+            return value % Ints.Two == Ints.Zero;
         }
 
         /// <summary>
@@ -39,9 +41,9 @@ namespace NevesCS.Static.Utils
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static decimal SubtractPercentage(decimal total, decimal percentage)
         {
-            return percentage is < 0 or > 100
+            return percentage is < Ints.Zero or > Ints.OneHundred
                 ? throw new ArgumentOutOfRangeException(nameof(percentage))
-                : SubtractFractionalPercentage(total, percentage / 100);
+                : SubtractFractionalPercentage(total, percentage / Ints.OneHundred);
         }
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace NevesCS.Static.Utils
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static decimal SubtractFractionalPercentage(decimal total, decimal fractionalPercentage)
         {
-            return fractionalPercentage is < 0 or > 1
+            return fractionalPercentage is < Ints.Zero or > Ints.One
                 ? throw new ArgumentOutOfRangeException(nameof(fractionalPercentage))
                 : total * fractionalPercentage;
         }
@@ -64,9 +66,9 @@ namespace NevesCS.Static.Utils
         /// </summary>
         public static decimal PercentageOfTotal(decimal part, decimal total)
         {
-            return total == 0
+            return total == Ints.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(total))
-                : (part * 100) / total;
+                : (part * Ints.OneHundred) / total;
         }
 
         /// <summary>
@@ -76,24 +78,24 @@ namespace NevesCS.Static.Utils
         /// </summary>
         public static decimal FractionalPercentageOfTotal(decimal part, decimal total)
         {
-            return total == 0
+            return total == Ints.Zero
                 ? throw new ArgumentOutOfRangeException(nameof(total))
-                : PercentageOfTotal(part, total) / 100;
+                : PercentageOfTotal(part, total) / Ints.OneHundred;
         }
 
         public static int Concat(int left, int right)
         {
-            return (left * ((int)Math.Pow(10, DigitCount(right)))) + right;
+            return (left * ((int)Math.Pow(Ints.Ten, DigitCount(right)))) + right;
         }
 
         public static int DigitCount(int value)
         {
-            var counter = 1;
-            var widthMeter = 10;
+            var counter = Ints.One;
+            var widthMeter = Ints.Ten;
 
             while (widthMeter <= value)
             {
-                widthMeter *= 10;
+                widthMeter *= Ints.Ten;
                 ++counter;
             }
 

@@ -2,7 +2,6 @@ using System.Collections.Concurrent;
 
 using NevesCS.Abstractions.Interfaces;
 using NevesCS.NonStatic.Clients;
-using NevesCS.NonStatic.Collections;
 using NevesCS.Static.Utils;
 
 namespace NevesCS.NonStatic.Patterns;
