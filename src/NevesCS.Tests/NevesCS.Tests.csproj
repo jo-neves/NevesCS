@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
@@ -27,7 +27,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NevesCS.Abstractions\NevesCS.Abstractions.csproj" />
-    <ProjectReference Include="..\NevesCS.AspNetCore.Abstractions\NevesCS.AspNetCore.Abstractions.csproj" />
+    <ProjectReference
+      Include="..\NevesCS.AspNetCore.Abstractions\NevesCS.AspNetCore.Abstractions.csproj" />
     <ProjectReference Include="..\NevesCS.AspNetCore\NevesCS.AspNetCore.csproj" />
     <ProjectReference Include="..\NevesCS.NonStatic.Models\NevesCS.NonStatic.Models.csproj" />
     <ProjectReference Include="..\NevesCS.NonStatic\NevesCS.NonStatic.csproj" />
