@@ -75,11 +75,11 @@ namespace NevesCS.Static.Utils
                 .Where(wherePredicate);
         }
 
-        public static Type GetTypeByNameFromAssembly(Assembly assembly, string typeName)
+        public static Type? GetTypeByNameFromAssembly(Assembly assembly, string typeName)
         {
             return assembly
                 .GetTypes()
-                .First(type => type.Name == typeName);
+                .FirstOrDefault(type => type.Name == typeName);
         }
 
         /// <summary>
