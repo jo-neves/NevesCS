@@ -37,6 +37,11 @@ namespace NevesCS.Static.Extensions
             return IEnumerableUtils.None(enumeration, predicate);
         }
 
+        public static bool AreAnyNull<T>(IEnumerable<T> values)
+        {
+            return IEnumerableUtils.AreAnyNull(values);
+        }
+
         public static T? TryGetElementAtOr<T>(this IEnumerable<T> enumeration, Index index, T? defaultValue = default)
         {
             return IEnumerableUtils.TryGetElementAtOr(enumeration, index, defaultValue);
