@@ -7,49 +7,48 @@ using NevesCS.Static.Extensions;
 using NevesCS.Static.Utils.Vendor;
 using Polly;
 
-namespace NevesCS.AspNetCore.Adapters
+namespace NevesCS.AspNetCore.Adapters;
+
+public sealed class DotnetHttpClient : IHttpClientAdapter
 {
-    public sealed class DotnetHttpClient : IHttpClientAdapter
+    private readonly HttpClient _httpClient;
+
+    private readonly IJsonParser _jsonClient;
+
+    private readonly TimeSpan[] _sleepDurationPolicy;
+
+    public DotnetHttpClient(
+        IOptions<HttpConfig> appConfig,
+        HttpClient httpClient,
+        IJsonParser jsonClient)
     {
-        private readonly HttpClient _httpClient;
+        _httpClient = httpClient.ThrowIfNull(nameof(httpClient));
+        _jsonClient = jsonClient.ThrowIfNull(nameof(jsonClient));
 
-        private readonly IJsonParser _jsonClient;
+        _sleepDurationPolicy = [.. PollyRetryPolicyUtils.GetSleepDurationPolicy(
+            !appConfig.IsNull() ? appConfig.Value.NumberOfHttpRetries : 3,
+            startMillisecondsDuration: 500)];
+    }
 
-        private readonly TimeSpan[] _sleepDurationPolicy;
+    public async Task<TResponse?> GetAsync<TResponse>(string endpoint, CancellationToken cancellationToken = default)
+    {
+        endpoint.ThrowIfNull(nameof(endpoint));
 
-        public DotnetHttpClient(
-            IOptions<HttpConfig> appConfig,
-            HttpClient httpClient,
-            IJsonParser jsonClient)
+        var pollyResponse = await Policy
+            .Handle<HttpRequestException>()
+            .WaitAndRetryAsync(_sleepDurationPolicy)
+            .ExecuteAndCaptureAsync(
+                async (cancelToken) => await _httpClient.GetStreamAsync(endpoint, cancelToken),
+                cancellationToken);
+
+        if (pollyResponse.FinalException is not null)
         {
-            _httpClient = httpClient.ThrowIfNull(nameof(httpClient));
-            _jsonClient = jsonClient.ThrowIfNull(nameof(jsonClient));
-
-            _sleepDurationPolicy = [.. PollyRetryPolicyUtils.GetSleepDurationPolicy(
-                !appConfig.IsNull() ? appConfig.Value.NumberOfHttpRetries : 3,
-                startMillisecondsDuration: 500)];
+            throw pollyResponse.FinalException;
         }
 
-        public async Task<TResponse?> GetAsync<TResponse>(string endpoint, CancellationToken cancellationToken = default)
-        {
-            endpoint.ThrowIfNull(nameof(endpoint));
+        var result = _jsonClient.DeserializeStream<TResponse?>(pollyResponse.Result);
+        await pollyResponse.Result.DisposeAsync();
 
-            var pollyResponse = await Policy
-                .Handle<HttpRequestException>()
-                .WaitAndRetryAsync(_sleepDurationPolicy)
-                .ExecuteAndCaptureAsync(
-                    async (cancelToken) => await _httpClient.GetStreamAsync(endpoint, cancelToken),
-                    cancellationToken);
-
-            if (pollyResponse.FinalException is not null)
-            {
-                throw pollyResponse.FinalException;
-            }
-
-            var result = _jsonClient.DeserializeStream<TResponse?>(pollyResponse.Result);
-            await pollyResponse.Result.DisposeAsync();
-
-            return result;
-        }
+        return result;
     }
 }

@@ -22,5 +22,26 @@ namespace NevesCS.Tests.Static
             source.EqualsIgnoreCase(target!).Should().Be(expected);
             StringUtils.EqualsIgnoreCase(source, target!).Should().Be(expected);
         }
+
+        [Theory]
+        [InlineData("ABC", false)]
+        [InlineData(null, true)]
+        [InlineData("", true)]
+        public void ThrowIfNullOrEmpty_Should_Pass(string? target, bool shouldThrow)
+        {
+            var act1 = () => target.ThrowIfNullOrEmpty(nameof(target));
+            var act2 = () => target.AssertIfNullOrEmpty(nameof(target));
+
+            if (shouldThrow)
+            {
+                act1.Should().Throw();
+                act2.Should().Throw();
+            }
+            else
+            {
+                act1.Should().NotThrow();
+                act2.Should().NotThrow();
+            }
+        }
     }
 }

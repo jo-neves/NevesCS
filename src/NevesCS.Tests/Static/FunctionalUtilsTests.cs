@@ -1,6 +1,6 @@
 using FluentAssertions;
 
-using NevesCS.Static.Extensions;
+using NevesCS.Static.Extensions.Functional;
 using NevesCS.Static.Utils;
 using NevesCS.Tests.Mocks;
 
