@@ -82,5 +82,15 @@ namespace NevesCS.Static.Utils
 
             return existingValue;
         }
+
+        public static void UpdateOrCreate<TKey, TValue>(
+            IDictionary<TKey, TValue> target,
+            IDictionary<TKey, TValue> source)
+        {
+            foreach (var kvp in source)
+            {
+                target[kvp.Key] = kvp.Value;
+            }
+        }
     }
 }

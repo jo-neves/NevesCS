@@ -64,5 +64,12 @@ namespace NevesCS.Static.Extensions
         {
             return DictionaryUtils.Upsert(target, key, value);
         }
+
+        public static void UpdateOrCreate<TKey, TValue>(
+            this IDictionary<TKey, TValue> target,
+            IDictionary<TKey, TValue> source)
+        {
+            DictionaryUtils.UpdateOrCreate(target, source);
+        }
     }
 }
