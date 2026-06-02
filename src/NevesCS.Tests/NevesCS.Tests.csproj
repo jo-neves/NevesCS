@@ -26,9 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../NevesCS.Static.Extensions.Functional/NevesCS.Static.Extensions.Functional.csproj" />
     <ProjectReference Include="..\NevesCS.Abstractions\NevesCS.Abstractions.csproj" />
-    <ProjectReference
-      Include="..\NevesCS.AspNetCore.Abstractions\NevesCS.AspNetCore.Abstractions.csproj" />
+    <ProjectReference Include="..\NevesCS.AspNetCore.Abstractions\NevesCS.AspNetCore.Abstractions.csproj" />
     <ProjectReference Include="..\NevesCS.AspNetCore\NevesCS.AspNetCore.csproj" />
     <ProjectReference Include="..\NevesCS.NonStatic.Models\NevesCS.NonStatic.Models.csproj" />
     <ProjectReference Include="..\NevesCS.NonStatic\NevesCS.NonStatic.csproj" />
