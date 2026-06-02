@@ -17,7 +17,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 
-    <FrameworkVersion>0.7.0</FrameworkVersion>
+    <FrameworkVersion>0.7.1</FrameworkVersion>
 
     <SwashbuckleVersion>6.5.0</SwashbuckleVersion>
   </PropertyGroup>

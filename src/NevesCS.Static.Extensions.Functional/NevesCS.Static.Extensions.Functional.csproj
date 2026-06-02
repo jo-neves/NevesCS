@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\NevesCS.props" />
+
+  <PropertyGroup>
+    <Version>$(FrameworkVersion)</Version>
+
+    <PackageId>NevesCS.Static.Extensions.Function</PackageId>
+    <Product>NevesCS.Static.Extensions.Function</Product>
+    <Description>Library that provides functional utilities.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../NevesCS.Static/NevesCS.Static.csproj" />
+  </ItemGroup>
+
+</Project>

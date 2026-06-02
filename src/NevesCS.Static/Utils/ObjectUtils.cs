@@ -1,115 +1,114 @@
 using System.Diagnostics;
 
-namespace NevesCS.Static.Utils
+namespace NevesCS.Static.Utils;
+
+public static class ObjectUtils
 {
-    public static class ObjectUtils
+    public static bool IsNull<T>(T? @object)
     {
-        public static bool IsNull<T>(T? @object)
+        return @object == null;
+    }
+
+    public static bool IsNotNull<T>(T? @object)
+    {
+        return !IsNull(@object);
+    }
+
+    public static bool IsNullOrDefault<T>(T? @object)
+    {
+        return IsNull(@object) || Equals(@object, default(T?));
+    }
+
+    public static bool IsNotNullNorDefault<T>(T? @object)
+    {
+        return !IsNull(@object) && !Equals(@object, default(T?));
+    }
+
+    public static T ThrowIfNull<T>(T? @object, Type type)
+    {
+        ArgumentNullException.ThrowIfNull(@object, type.Name);
+
+        return @object!;
+    }
+
+    public static T ThrowIfNull<T>(T? @object, string parameterName)
+    {
+        ArgumentNullException.ThrowIfNull(@object, parameterName);
+
+        return @object!;
+    }
+
+    public static T AssertNotNull<T>(T? @object, string parameterName)
+    {
+        Debug.Assert(!IsNull(@object), parameterName);
+
+        return @object!;
+    }
+
+    public static T AssertTrue<T>(T @object, bool condition, string message)
+    {
+        Debug.Assert(condition, message);
+
+        return @object;
+    }
+
+    public static TOut? CastAs<TOut>(object @object)
+    {
+        return @object is not TOut ? default : (TOut)@object;
+    }
+
+    /// <summary>
+    /// Enumerates all parameters in <paramref name="targets"/>.
+    ///
+    /// </summary>
+    public static IEnumerable<T> Enumerate<T>(params T[] targets)
+    {
+        foreach (var item in targets)
         {
-            return @object == null;
+            yield return item;
         }
+    }
 
-        public static bool IsNotNull<T>(T? @object)
+    /// <summary>
+    /// Repeats the same instance (<paramref name="source"/>) times the number defined by <paramref name="count"/>.
+    ///
+    /// </summary>
+    public static IEnumerable<T> Enumerate<T>(T source, int count)
+    {
+        for (int i = 1; i <= count; ++i)
         {
-            return !IsNull(@object);
+            yield return source;
         }
+    }
 
-        public static bool IsNullOrDefault<T>(T? @object)
+    /// <summary>
+    /// Enumerates clones of the source instance times the number defined by <paramref name="count"/>.
+    ///
+    /// </summary>
+    public static IEnumerable<T> EnumerateClones<T>(ICloneable source, int count = 0)
+        where T : ICloneable
+    {
+        for (int i = 1; i <= count; ++i)
         {
-            return IsNull(@object) || Equals(@object, default(T?));
+            yield return (T)source.Clone();
         }
+    }
 
-        public static bool IsNotNullNorDefault<T>(T? @object)
-        {
-            return !IsNull(@object) && !Equals(@object, default(T?));
-        }
+    /// <summary>
+    /// Creates a new array with the object.
+    ///
+    /// </summary>
+    public static object[] ToArray(object source)
+    {
+        return ToArray<object>(source);
+    }
 
-        public static T ThrowIfNull<T>(T? @object, Type type)
-        {
-            ArgumentNullException.ThrowIfNull(@object, type.Name);
-
-            return @object!;
-        }
-
-        public static T ThrowIfNull<T>(T? @object, string parameterName)
-        {
-            ArgumentNullException.ThrowIfNull(@object, parameterName);
-
-            return @object!;
-        }
-
-        public static T AssertNotNull<T>(T? @object, string parameterName)
-        {
-            Debug.Assert(!IsNull(@object), parameterName);
-
-            return @object!;
-        }
-
-        public static T AssertTrue<T>(T @object, bool condition, string message)
-        {
-            Debug.Assert(condition, message);
-
-            return @object;
-        }
-
-        public static TOut? CastAs<TOut>(object @object)
-        {
-            return @object is not TOut ? default : (TOut)@object;
-        }
-
-        /// <summary>
-        /// Enumerates all parameters in <paramref name="targets"/>.
-        ///
-        /// </summary>
-        public static IEnumerable<T> Enumerate<T>(params T[] targets)
-        {
-            foreach (var item in targets)
-            {
-                yield return item;
-            }
-        }
-
-        /// <summary>
-        /// Repeats the same instance (<paramref name="source"/>) times the number defined by <paramref name="count"/>.
-        ///
-        /// </summary>
-        public static IEnumerable<T> Enumerate<T>(T source, int count)
-        {
-            for (int i = 1; i <= count; ++i)
-            {
-                yield return source;
-            }
-        }
-
-        /// <summary>
-        /// Enumerates clones of the source instance times the number defined by <paramref name="count"/>.
-        ///
-        /// </summary>
-        public static IEnumerable<T> EnumerateClones<T>(ICloneable source, int count = 0)
-            where T : ICloneable
-        {
-            for (int i = 1; i <= count; ++i)
-            {
-                yield return (T)source.Clone();
-            }
-        }
-
-        /// <summary>
-        /// Creates a new array with the object.
-        ///
-        /// </summary>
-        public static object[] ToArray(object source)
-        {
-            return ToArray<object>(source);
-        }
-
-        /// <summary>
-        /// Creates a new array with the object.
-        ///
-        /// </summary>
-        public static T[] ToArray<T>(object source)
-        {
-            return [(T)source];
-        }
+    /// <summary>
+    /// Creates a new array with the object.
+    ///
+    /// </summary>
+    public static T[] ToArray<T>(object source)
+    {
+        return [(T)source];
     }
 }
