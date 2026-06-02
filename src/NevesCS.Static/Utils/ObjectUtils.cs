@@ -26,20 +26,14 @@ namespace NevesCS.Static.Utils
 
         public static T ThrowIfNull<T>(T? @object, Type type)
         {
-            if (IsNull(@object))
-            {
-                throw new ArgumentNullException(type.Name);
-            }
+            ArgumentNullException.ThrowIfNull(@object, type.Name);
 
             return @object!;
         }
 
         public static T ThrowIfNull<T>(T? @object, string parameterName)
         {
-            if (IsNull(@object))
-            {
-                throw new ArgumentNullException(parameterName);
-            }
+            ArgumentNullException.ThrowIfNull(@object, parameterName);
 
             return @object!;
         }
@@ -51,9 +45,9 @@ namespace NevesCS.Static.Utils
             return @object!;
         }
 
-        public static T AssertTrue<T>(T @object, bool test, string message)
+        public static T AssertTrue<T>(T @object, bool condition, string message)
         {
-            Debug.Assert(test, message);
+            Debug.Assert(condition, message);
 
             return @object;
         }
