@@ -1,20 +1,75 @@
-namespace NevesCS.Static.Utils
+using System.Diagnostics;
+
+namespace NevesCS.Static.Utils;
+
+public static class StringUtils
 {
-    public static class StringUtils
+    public static string CloneIntoNew(string source)
     {
-        public static string CloneIntoNew(string source)
+        return new string(source);
+    }
+
+    public static string ThrowIfNullOrEmpty(string? @string, string parameterName)
+    {
+        if (string.IsNullOrEmpty(@string))
         {
-            return new string(source);
+            throw new ArgumentNullException(parameterName);
         }
 
-        public static bool EqualsIgnoreCase(string? source, string target)
+        return @string!;
+    }
+
+    public static string AssertIfNullOrEmpty(string? @string, string parameterName)
+    {
+        Debug.Assert(!string.IsNullOrEmpty(@string), parameterName);
+
+        return @string!;
+    }
+
+    public static string ThrowIfNullOrWhiteSpace(string? @string, string parameterName)
+    {
+        if (string.IsNullOrWhiteSpace(@string))
         {
-            return source?.Equals(target, StringComparison.OrdinalIgnoreCase) == true;
+            throw new ArgumentNullException(parameterName);
         }
 
-        public static Guid HashIntoGuid(string source)
+        return @string!;
+    }
+
+    public static string AssertIfNullOrWhiteSpace(string? @string, string parameterName)
+    {
+        Debug.Assert(string.IsNullOrWhiteSpace(@string), parameterName);
+
+        return @string!;
+    }
+
+    public static string OrIfNullOrEmpty(string? target, string defaultValue)
+    {
+        if (!string.IsNullOrEmpty(target))
         {
-            return GuidUtils.HashStringIntoGuid(source);
+            return target!;
         }
+
+        return defaultValue;
+    }
+
+    public static string OrIfNullOrWhiteSpace(string? target, string defaultValue)
+    {
+        if (!string.IsNullOrWhiteSpace(target))
+        {
+            return target!;
+        }
+
+        return defaultValue;
+    }
+
+    public static bool EqualsIgnoreCase(string? source, string target)
+    {
+        return source?.Equals(target, StringComparison.OrdinalIgnoreCase) == true;
+    }
+
+    public static Guid HashIntoGuid(string source)
+    {
+        return GuidUtils.HashStringIntoGuid(source);
     }
 }

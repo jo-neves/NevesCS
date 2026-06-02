@@ -12,10 +12,14 @@ namespace NevesCS.Abstractions.Clients.Web3.SolanaJupiterHttpApi.Models
         public required readonly JupiterOrderType OrderType { get; init; }
 
         /// <summary>
-        /// Amount of input token.
+        /// The amount of input token is the amount of token that goes out of the account into the Swap Program.
+        /// The token we trade for the one we want to get in the current swap. <br/>
+        /// <br/>
         ///
+        /// IF JupiterOrderType.Buy => InputToken IS QuoteAssetAddress <br/>
+        /// IF JupiterOrderType.Sell => InputToken IS BaseAssetAddress <br/>
         /// </summary>
-        public required readonly decimal Amount { get; init; }
+        public required readonly decimal AmountOfInputToken { get; init; }
 
         /// <summary>
         /// E.g. 0.5%, 1%, etc.

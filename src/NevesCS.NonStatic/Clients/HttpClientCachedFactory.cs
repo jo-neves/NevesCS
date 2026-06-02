@@ -1,0 +1,32 @@
+using NevesCS.Abstractions.Interfaces;
+using NevesCS.NonStatic.Patterns;
+using NevesCS.Static.Utils;
+
+namespace NevesCS.NonStatic.Clients
+{
+    public sealed class HttpClientCachedFactory : ICachedServiceFactory<HttpClient>
+    {
+        private readonly IHttpClientFactory HttpClientFactory;
+
+        public HttpClientCachedFactory(IHttpClientFactory httpClientFactory)
+        {
+            HttpClientFactory = ObjectUtils.AssertNotNull(httpClientFactory, nameof(httpClientFactory));
+        }
+
+        public HttpClient Create(string key)
+        {
+            return HttpClientFactory.CreateClient(key);
+        }
+
+        public static CachedServiceFactoryManager<HttpClient> CreateNewManager(
+            CachedFactoryOptions options,
+            IHttpClientFactory httpClientFactory,
+            CancellationToken cancellationToken = default)
+        {
+            return new CachedServiceFactoryManager<HttpClient>(
+                options,
+                new HttpClientCachedFactory(httpClientFactory),
+                cancellationToken);
+        }
+    }
+}

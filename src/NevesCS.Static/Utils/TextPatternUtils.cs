@@ -1,5 +1,4 @@
-using NevesCS.Static.Constants;
-
+using NevesCS.Static.Constants.Values;
 using System.Net.Mail;
 
 namespace NevesCS.Static.Utils

@@ -7,9 +7,9 @@ namespace NevesCS.NonStatic.Services.ThreadRateLimiters
     /// Thread safe. Can be used between multiple threads to synchronize them.
     ///
     /// </summary>
-    public sealed class SyncTimeIntervalThreadRateLimiter : IThreadRateLimiter
+    public sealed class SyncTimeIntervalThreadRateLimiter : IThreadRateLimiter, IDisposable
     {
-        private readonly TimeSpan IntervalInBetween;
+        private readonly TimeSpan IntervalInBetweenReleases;
         private readonly bool ShouldLock;
 
         private readonly IClock Clock;
@@ -23,8 +23,8 @@ namespace NevesCS.NonStatic.Services.ThreadRateLimiters
         /// <exception cref="ArgumentNullException"></exception>
         public SyncTimeIntervalThreadRateLimiter(TimeSpan intervalInBetween)
         {
-            IntervalInBetween = ObjectUtils.ThrowIfNull(intervalInBetween, nameof(intervalInBetween));
-            ShouldLock = IntervalInBetween.Ticks > 0;
+            IntervalInBetweenReleases = ObjectUtils.ThrowIfNull(intervalInBetween, nameof(intervalInBetween));
+            ShouldLock = IntervalInBetweenReleases.Ticks > 0;
 
             Clock = new UtcClock();
             Reset();
@@ -37,14 +37,16 @@ namespace NevesCS.NonStatic.Services.ThreadRateLimiters
         /// <exception cref="ArgumentNullException"></exception>
         public SyncTimeIntervalThreadRateLimiter(TimeSpan intervalInBetween, IClock clock)
         {
-            IntervalInBetween = ObjectUtils.ThrowIfNull(intervalInBetween, nameof(intervalInBetween));
-            ShouldLock = IntervalInBetween.Ticks > 0;
+            IntervalInBetweenReleases = ObjectUtils.ThrowIfNull(intervalInBetween, nameof(intervalInBetween));
+            ShouldLock = IntervalInBetweenReleases.Ticks > 0;
 
             Clock = ObjectUtils.ThrowIfNull(clock, nameof(clock));
             Reset();
         }
 
         private long LastReleaseTicks;
+
+        private bool disposedValue;
 
         public void Reset()
         {
@@ -55,19 +57,48 @@ namespace NevesCS.NonStatic.Services.ThreadRateLimiters
         {
             if (!ShouldLock)
             {
-                await Task.Delay(IntervalInBetween, cancellationToken).ConfigureAwait(false);
+                await Task.Delay(IntervalInBetweenReleases, cancellationToken).ConfigureAwait(false);
             }
             else
             {
                 await _Semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
 
-                var ticksSinceLastRelease = (DateTimeOffset.UtcNow.Ticks - LastReleaseTicks);
-                var timeToWait = TimeSpan.FromTicks(Math.Max(0, IntervalInBetween.Ticks - ticksSinceLastRelease));
-                await Task.Delay(timeToWait, cancellationToken).ConfigureAwait(false);
+                var timeToWait = CalculateTimeToAwait();
+
+                if (timeToWait != TimeSpan.Zero)
+                {
+                    await Task.Delay(timeToWait, cancellationToken).ConfigureAwait(false);
+                }
 
                 Reset();
                 _Semaphore.Release();
             }
+        }
+
+        private TimeSpan CalculateTimeToAwait()
+        {
+            var ticksSinceLastRelease = (DateTimeOffset.UtcNow.Ticks - LastReleaseTicks);
+
+            return TimeSpan.FromTicks(Math.Max(0, IntervalInBetweenReleases.Ticks - ticksSinceLastRelease));
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _Semaphore.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

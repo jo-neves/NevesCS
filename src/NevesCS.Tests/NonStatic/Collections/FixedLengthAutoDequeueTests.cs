@@ -11,7 +11,7 @@ namespace NevesCS.Tests.NonStatic.Collections
         {
             const int fixedLen = 21;
             const int lenAtStart = 3;
-            var queue = new FixedLengthAutoDequeue<int>(fixedLen, [1, 2, 3]);
+            var queue = new FixedSizeAutoDequeue<int>(fixedLen, [1, 2, 3]);
 
             queue.Count().Should().Be(lenAtStart);
             queue.Should().BeEquivalentTo([1, 2, 3]);

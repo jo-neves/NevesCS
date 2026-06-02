@@ -34,13 +34,26 @@ namespace NevesCS.Tests.Static
         }
 
         [Fact]
-        public void Into_Should_TransferObjects()
+        public void Into_Should_Allow_ConvertPrimitiveIntoReference()
         {
             const string fakeName = "This is a name I need";
             MockClass mockClass = new() { UselessString = fakeName };
 
             FunctionalUtils.Into(mockClass, mock => new DataGame() { Name = mock.UselessString }).Name.Should().Be(fakeName);
             mockClass.Into(mock => new DataGame() { Name = mock.UselessString }).Name.Should().Be(fakeName);
+        }
+
+        [Fact]
+        public void Into_Should_Allow_ConvertReferenceIntoTuple()
+        {
+            const string fakeName = "This is a name I need";
+            const string fakeUselessName = "Whatever";
+            MockClass mockClass = new() { UselessString = fakeName, UselessList = [fakeUselessName] };
+
+            var (resultFakeName, resultUselessFakeName) = mockClass.Into(mock => (mock.UselessString, mock.UselessList.Single()));
+
+            resultFakeName.Should().Be(fakeName);
+            resultUselessFakeName.Should().Be(fakeUselessName);
         }
     }
 }

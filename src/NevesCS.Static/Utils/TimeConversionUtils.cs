@@ -1,4 +1,5 @@
-using NevesCS.Static.Constants;
+using NevesCS.Static.Constants.Values;
+
 using System.Numerics;
 
 namespace NevesCS.Static.Utils

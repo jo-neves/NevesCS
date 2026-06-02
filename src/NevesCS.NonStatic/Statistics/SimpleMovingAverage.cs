@@ -1,46 +1,38 @@
 using NevesCS.Abstractions.Interfaces;
-using NevesCS.NonStatic.Constants;
-using NevesCS.Static.Constants;
+using NevesCS.Static.Constants.Values;
 
 namespace NevesCS.NonStatic.Statistics
 {
     public class SimpleMovingAverage : IStatisticalIndicator
     {
-        private readonly LinkedList<decimal> Data = new();
+        private readonly Queue<decimal> Data;
 
         private decimal Total = Ints.Zero;
-        private int SampleSize = 21;
 
-        public void SetSampleSize(int sampleSize)
+        private readonly uint SampleSize;
+
+        public SimpleMovingAverage(uint sampleSize)
         {
-            if (sampleSize <= Ints.Zero)
-            {
-                throw new ArgumentOutOfRangeException(nameof(sampleSize), $"{nameof(sampleSize)} must be higher than 0.");
-            }
-
             SampleSize = sampleSize;
+
+            Data = new((int)sampleSize);
         }
 
         public void AddSample(decimal item)
         {
-            if (Data.First == null)
-            {
-                throw new InvalidOperationException(ErrorMessages.CollectionEmpty);
-            }
-
             if (Data.Count == SampleSize)
             {
-                Total -= Data.First!.Value;
-                Data.RemoveFirst();
+                Total -= Data.Dequeue();
             }
 
             Total += item;
-            Data.AddLast(item);
+            Data.Enqueue(item);
         }
 
         public decimal Compute(decimal newSample)
         {
             AddSample(newSample);
+
             return Compute();
         }
 

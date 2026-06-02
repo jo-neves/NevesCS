@@ -1,6 +1,6 @@
 using NevesCS.Abstractions.Types;
 using NevesCS.NonStatic.Models.ValueTypes;
-using NevesCS.Static.Constants;
+using NevesCS.Static.Constants.Values;
 
 namespace NevesCS.Static.Utils
 {

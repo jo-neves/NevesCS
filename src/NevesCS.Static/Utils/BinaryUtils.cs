@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Text;
 
 using NevesCS.Static.Constants;
+using NevesCS.Static.Constants.Values;
 
 namespace NevesCS.Static.Utils
 {

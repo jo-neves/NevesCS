@@ -1,17 +1,33 @@
+using NevesCS.Abstractions.Interfaces;
+using NevesCS.NonStatic.Patterns;
+using NevesCS.Static.Utils;
+
 namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Factories
 {
-    public sealed class SolanaJupiterV6PublicRestClientCachedFactory : BaseHttpClientCachedFactory<SolanaJupiterV6PublicRestClient>
+    public sealed class SolanaJupiterV6PublicRestClientCachedFactory
+        : ICachedServiceFactory<SolanaJupiterV6PublicRestClient>
     {
-        public SolanaJupiterV6PublicRestClientCachedFactory(
-            HttpClientCachedFactoryOptions options,
-            IHttpClientFactory httpClientFactory)
-            : base(options, httpClientFactory)
+        private readonly ICachedServiceFactory<HttpClient> HttpClientCachedFactory;
+
+        public SolanaJupiterV6PublicRestClientCachedFactory(ICachedServiceFactory<HttpClient> httpClientCachedFactory)
         {
+            HttpClientCachedFactory = ObjectUtils.ThrowIfNull(httpClientCachedFactory, nameof(httpClientCachedFactory));
         }
 
-        protected override SolanaJupiterV6PublicRestClient CreateNewInstance(string key, HttpClient httpClient)
+        public SolanaJupiterV6PublicRestClient Create(string key)
         {
-            return new SolanaJupiterV6PublicRestClient(httpClient);
+            return new SolanaJupiterV6PublicRestClient(HttpClientCachedFactory.Create(key));
+        }
+
+        public static CachedServiceFactoryManager<SolanaJupiterV6PublicRestClient> CreateNewManager(
+            CachedFactoryOptions options,
+            ICachedServiceFactory<HttpClient> httpClientCachedFactory,
+            CancellationToken cancellationToken = default)
+        {
+            return new CachedServiceFactoryManager<SolanaJupiterV6PublicRestClient>(
+                options,
+                new SolanaJupiterV6PublicRestClientCachedFactory(httpClientCachedFactory),
+                cancellationToken);
         }
     }
 }

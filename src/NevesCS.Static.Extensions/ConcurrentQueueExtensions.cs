@@ -6,9 +6,17 @@ namespace NevesCS.Static.Extensions
 {
     public static class ConcurrentQueueExtensions
     {
-        public static IEnumerable<T> DequeueAllNonBlocking<T>(this ConcurrentQueue<T> target)
+        public static async Task HandleAllAsync<T>(
+            this ConcurrentQueue<T> target,
+            Func<T, CancellationToken, Task> asyncHandler,
+            CancellationToken cancellationToken = default)
         {
-            return ConcurrentQueueUtils.DequeueAllNonBlocking(target);
+            await ConcurrentQueueUtils.HandleAllAsync(target, asyncHandler, cancellationToken);
+        }
+
+        public static IEnumerable<T> DequeueAll<T>(this ConcurrentQueue<T> target)
+        {
+            return ConcurrentQueueUtils.DequeueAll(target);
         }
     }
 }

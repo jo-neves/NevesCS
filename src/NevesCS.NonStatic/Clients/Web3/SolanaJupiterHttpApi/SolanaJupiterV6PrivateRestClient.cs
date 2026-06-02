@@ -8,6 +8,10 @@ using NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi.Abstractions;
 using NevesCS.Static.Utils.Web3.Solana;
 
 using Solnet.Rpc;
+using Solnet.Rpc.Core.Http;
+using Solnet.Rpc.Messages;
+using Solnet.Rpc.Models;
+using Solnet.Rpc.Types;
 using Solnet.Wallet;
 
 using System.Net.Http.Json;
@@ -72,7 +76,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi
             SolanaJupiterV6SwapRequest request,
             CancellationToken cancellationToken = default)
         {
-            if (request.Amount <= 0)
+            if (request.AmountOfInputToken <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(request));
             }
@@ -80,11 +84,11 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi
             var httpClient = GetHttpClient();
             var rpcClient = GetRpcClient(httpClient);
 
-            var quoteResponse = await GetQuoteAsync(request, httpClient, rpcClient, cancellationToken);
+            SolanaJupiterV6QuoteApiResponse? quoteResponse = await GetQuoteAsync(request, httpClient, rpcClient, cancellationToken);
 
-            var tx = await GetSwapTransactionAsync(quoteResponse.Value, httpClient, cancellationToken);
+            byte[] tx = await GetSwapTransactionAsync(quoteResponse.Value, httpClient, cancellationToken);
 
-            var simulation = await rpcClient.SimulateTransactionAsync(
+            RequestResult<ResponseValue<SimulationLogs>> simulation = await rpcClient.SimulateTransactionAsync(
                transaction: tx,
                replaceRecentBlockhash: true);
 
@@ -93,11 +97,13 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi
                 throw new SolanaRpcException(JsonParser.SerializeObject(simulation));
             }
 
-            var txResponse = (await rpcClient.SendTransactionAsync(tx));
+            RequestResult<string> txResponse = (await rpcClient.SendTransactionAsync(
+                transaction: tx,
+                commitment: Commitment.Finalized));
 
             if (!txResponse.WasSuccessful || txResponse.ErrorData != null)
             {
-                throw new SolanaRpcException(JsonParser.SerializeObject(simulation));
+                throw new SolanaRpcException(JsonParser.SerializeObject(txResponse));
             }
 
             if (HasFactory)
@@ -108,6 +114,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi
             return new SolanaJupiterV6SwapTransactionResponse()
             {
                 TxId = txResponse.Result,
+                Quote = quoteResponse.Value,
             };
         }
 
@@ -143,7 +150,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi
                 ? request.BaseAssetAddress
                 : request.QuoteAssetAddress;
 
-            var tokenInDecimalCountRes = await rpcClient.GetTokenAccountInfoAsync(tokenIn);
+            RequestResult<ResponseValue<TokenAccountInfo>> tokenInDecimalCountRes = await rpcClient.GetTokenAccountInfoAsync(tokenIn);
 
             if (!tokenInDecimalCountRes.WasSuccessful || tokenInDecimalCountRes.ErrorData != null)
             {
@@ -159,7 +166,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi
              * each token by looking up the decimals for that token".
              * E.g. USDC has 6 decimals, so 1 = 1000000
              */
-            var amountIn = (int)(request.Amount * (decimal)(Math.Pow(10, tokenInDecimalCount)));
+            var amountIn = (int)(request.AmountOfInputToken * (decimal)(Math.Pow(10, tokenInDecimalCount)));
 
             /*
              * The slippage % in BPS.
@@ -192,7 +199,7 @@ namespace NevesCS.NonStatic.Clients.Web3.SolanaJupiterHttpApi
             HttpClient httpClient,
             CancellationToken cancellationToken = default)
         {
-            var swapTxResponse = await httpClient.PostAsJsonAsync(
+            HttpResponseMessage swapTxResponse = await httpClient.PostAsJsonAsync(
                 $"{SolanaJupiterConstants.BaseUrlApiQuote}/swap",
                 new SolanaJupiterV6SwapApiRequest()
                 {

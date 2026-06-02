@@ -4,9 +4,8 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/joao-neves95/NevesCS</RepositoryUrl>
 
-    <!--<TargetFrameworks>net6.0;net7.0</TargetFrameworks>-->
-    <TargetFramework>net8.0</TargetFramework>
-    <LangVersion>12</LangVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
@@ -18,7 +17,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
 
-    <FrameworkVersion>0.6.0</FrameworkVersion>
+    <FrameworkVersion>0.7.0</FrameworkVersion>
 
     <SwashbuckleVersion>6.5.0</SwashbuckleVersion>
   </PropertyGroup>

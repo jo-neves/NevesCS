@@ -17,6 +17,29 @@ namespace NevesCS.Static.Utils
             return attribute.Description;
         }
 
+        public static T FromName<T>(string name)
+            where T : Enum
+        {
+            return (T)Enum.Parse(typeof(T), name);
+        }
+
+        public static bool TryFromName<T>(string name, out T? value)
+            where T : Enum
+        {
+            var success = Enum.TryParse(typeof(T), name, out object? result);
+
+            if (success)
+            {
+                value = (T?)result;
+            }
+            else
+            {
+                value = default;
+            }
+
+            return success;
+        }
+
         public static T FromDescription<T>(string description, bool checkFieldName = true)
             where T : Enum
         {

@@ -38,17 +38,28 @@ namespace NevesCS.Tests.Static
         }
 
         [Theory]
+        [InlineData(150, 20, 0.20, 30)]
+        [InlineData(100, 10, 0.10, 10)]
+        [InlineData(100, 98.5658, 0.985658, 98.5658)]
+        [InlineData(1110, 50, 0.50, 555)]
+        public void SubtractPercentage_Passes(decimal total, decimal percentage, decimal fractionalPercentage, decimal expected)
+        {
+            total.SubtractPercentage(percentage).Should().Be(expected);
+            total.SubtractFractionalPercentage(fractionalPercentage).Should().Be(expected);
+        }
+
+        [Theory]
         [InlineData(50, 100, 50, 0.5)]
         [InlineData(98.5658, 100, 98.5658, 0.985658)]
         [InlineData(555, 1110, 50, 0.5)]
         [InlineData(279.72, 1110, 25.2, 0.252)]
-        public void Percentage_Passes(decimal part, decimal total, decimal expected, decimal expectedFractional)
+        public void PercentageOfTotal_Passes(decimal part, decimal total, decimal expected, decimal expectedFractional)
         {
-            CalculationUtils.Percentage(part, total).Should().Be(expected);
-            part.PercentageOf(total).Should().Be(expected);
+            CalculationUtils.PercentageOfTotal(part, total).Should().Be(expected);
+            part.PercentageOfTotal(total).Should().Be(expected);
 
-            CalculationUtils.FractionalPercentage(part, total).Should().Be(expectedFractional);
-            part.FractionalPercentageOf(total).Should().Be(expectedFractional);
+            CalculationUtils.FractionalPercentageOfTotal(part, total).Should().Be(expectedFractional);
+            part.FractionalPercentageOfTotal(total).Should().Be(expectedFractional);
         }
 
         [Theory]

@@ -4,18 +4,27 @@ namespace NevesCS.NonStatic.Collections
 {
     public class ConcurrentHashSet<T> : ICountable, IDisposable
     {
-        private readonly HashSet<T> InternalHashSet = new();
+        private readonly HashSet<T> InternalHashSet = [];
 
         private readonly ReaderWriterLockSlim Lock = new(LockRecursionPolicy.SupportsRecursion);
 
-        ~ConcurrentHashSet()
-        {
-            Dispose(false);
-        }
+        private bool disposedValue;
 
         public int Count()
         {
-            return InternalHashSet.Count;
+            Lock.EnterReadLock();
+
+            try
+            {
+                return InternalHashSet.Count;
+            }
+            finally
+            {
+                if (Lock.IsReadLockHeld)
+                {
+                    Lock.ExitReadLock();
+                }
+            }
         }
 
         public bool Contains(T item)
@@ -81,18 +90,23 @@ namespace NevesCS.NonStatic.Collections
             }
         }
 
-        public void Dispose()
+        protected virtual void Dispose(bool disposing)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    Lock?.Dispose();
+                }
+
+                disposedValue = true;
+            }
         }
 
-        private void Dispose(bool disposing)
+        public void Dispose()
         {
-            if (disposing)
-            {
-                Lock?.Dispose();
-            }
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

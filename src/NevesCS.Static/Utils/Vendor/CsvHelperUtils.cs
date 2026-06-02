@@ -34,7 +34,7 @@ namespace NevesCS.Static.Utils.Vendor
             using var streamReader = new StreamReader(filePath, encoding: Encoding.UTF8);
             using var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
 
-            return await csvReader.GetRecordsAsync<T>(cancellationToken).ToListAsync();
+            return await csvReader.GetRecordsAsync<T>(cancellationToken).ToListAsync(cancellationToken);
         }
     }
 }

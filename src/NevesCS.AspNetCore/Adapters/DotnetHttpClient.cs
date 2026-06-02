@@ -4,7 +4,7 @@ using NevesCS.Abstractions.Services;
 using NevesCS.AspNetCore.Abstractions.Interfaces;
 using NevesCS.AspNetCore.Abstractions.Models.Configuration;
 using NevesCS.Static.Extensions;
-
+using NevesCS.Static.Utils.Vendor;
 using Polly;
 
 namespace NevesCS.AspNetCore.Adapters
@@ -25,9 +25,9 @@ namespace NevesCS.AspNetCore.Adapters
             _httpClient = httpClient.ThrowIfNull(nameof(httpClient));
             _jsonClient = jsonClient.ThrowIfNull(nameof(jsonClient));
 
-            _sleepDurationPolicy = GetSleepDurationPolicy(
-                !appConfig.IsNull() ? appConfig.Value.NumberOfHttpRetries : 3)
-                .ToArray();
+            _sleepDurationPolicy = [.. PollyRetryPolicyUtils.GetSleepDurationPolicy(
+                !appConfig.IsNull() ? appConfig.Value.NumberOfHttpRetries : 3,
+                startMillisecondsDuration: 500)];
         }
 
         public async Task<TResponse?> GetAsync<TResponse>(string endpoint, CancellationToken cancellationToken = default)
@@ -50,14 +50,6 @@ namespace NevesCS.AspNetCore.Adapters
             await pollyResponse.Result.DisposeAsync();
 
             return result;
-        }
-
-        private static IEnumerable<TimeSpan> GetSleepDurationPolicy(int numberOfRetries)
-        {
-            for (var i = 1; i <= numberOfRetries; ++i)
-            {
-                yield return TimeSpan.FromSeconds(i);
-            }
         }
     }
 }

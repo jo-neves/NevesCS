@@ -1,3 +1,4 @@
+using NevesCS.Abstractions.Types;
 using NevesCS.Static.Utils;
 
 namespace NevesCS.Static.Extensions
@@ -19,6 +20,11 @@ namespace NevesCS.Static.Extensions
             return DateTimeOffsetTimeZoneUtils.IsUtc(dateTime);
         }
 
+        public static DayOfWeek GetDayOfWeek(this DateTimeOffset utcDate, TimeZoneInfo timeZone)
+        {
+            return DateTimeOffsetTimeZoneUtils.GetDayOfWeek(utcDate, timeZone);
+        }
+
         /// <summary>
         /// Checks if the given DateTimeOffset is the last day of the month in the specified time zone.
         ///
@@ -26,6 +32,25 @@ namespace NevesCS.Static.Extensions
         public static bool IsLastDayOfTheMonth(this DateTimeOffset utcDate, TimeZoneInfo timeZone)
         {
             return DateTimeOffsetTimeZoneUtils.IsLastDayOfTheMonth(utcDate, timeZone);
+        }
+
+        public static bool IsInBetween(
+            this DateTimeOffset utcTargetDate,
+            IFiniteDateRange utcFiniteDateRange,
+            TimeZoneInfo timeZone,
+            bool inclusive)
+        {
+            return IsInBetween(utcTargetDate, utcFiniteDateRange.Start, utcFiniteDateRange.End, timeZone, inclusive);
+        }
+
+        public static bool IsInBetween(
+            this DateTimeOffset utcTargetDate,
+            DateTimeOffset utcStartDate,
+            DateTimeOffset utcEndDate,
+            TimeZoneInfo timeZone,
+            bool inclusive)
+        {
+            return IsInBetween(utcTargetDate, utcStartDate, utcEndDate, timeZone, inclusive);
         }
 
         /// <summary>
@@ -85,6 +110,16 @@ namespace NevesCS.Static.Extensions
         public static DateTimeOffset ToStartOfDay(this DateTimeOffset date, TimeZoneInfo timeZone)
         {
             return DateTimeOffsetTimeZoneUtils.ToStartOfDay(date, timeZone);
+        }
+
+        /// <summary>
+        /// Returns the UTC date corresponding to the end of day for the UTC date in accordance with local timezone. <br/>
+        /// This is a DST aware method.
+        ///
+        /// </summary>
+        public static DateTimeOffset ToEndOfDay(this DateTimeOffset date, TimeZoneInfo timeZone)
+        {
+            return DateTimeOffsetTimeZoneUtils.ToEndOfDay(date, timeZone);
         }
 
         public static DateTimeOffset ToStartOfWeek(this DateTimeOffset date, TimeZoneInfo timeZone)
