@@ -10,25 +10,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="8.8.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
-    <PackageReference Include="Mock" Version="1.0.0" />
-    <PackageReference Include="Moq" Version="4.20.72" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+    <PackageReference Include="FluentAssertions" Version="8.*" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.*" />
+    <PackageReference Include="Moq" Version="4.*" />
+    <PackageReference Include="xunit" Version="2.*" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.*">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="6.0.4">
+    <PackageReference Include="coverlet.collector" Version="10.*">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../NevesCS.Static.Extensions.Functional/NevesCS.Static.Extensions.Functional.csproj" />
+    <ProjectReference
+      Include="../NevesCS.Static.Extensions.Functional/NevesCS.Static.Extensions.Functional.csproj" />
     <ProjectReference Include="..\NevesCS.Abstractions\NevesCS.Abstractions.csproj" />
-    <ProjectReference Include="..\NevesCS.AspNetCore.Abstractions\NevesCS.AspNetCore.Abstractions.csproj" />
+    <ProjectReference
+      Include="..\NevesCS.AspNetCore.Abstractions\NevesCS.AspNetCore.Abstractions.csproj" />
     <ProjectReference Include="..\NevesCS.AspNetCore\NevesCS.AspNetCore.csproj" />
     <ProjectReference Include="..\NevesCS.NonStatic.Models\NevesCS.NonStatic.Models.csproj" />
     <ProjectReference Include="..\NevesCS.NonStatic\NevesCS.NonStatic.csproj" />
