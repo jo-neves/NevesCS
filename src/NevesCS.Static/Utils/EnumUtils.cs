@@ -4,19 +4,6 @@ namespace NevesCS.Static.Utils
 {
     public static class EnumUtils
     {
-        public static string GetDescription<T>(T enumValue)
-            where T : Enum
-        {
-            var field = enumValue.GetType().GetField(enumValue.ToString());
-
-            if (field is null || Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is not DescriptionAttribute attribute)
-            {
-                throw new ArgumentException($"{nameof(DescriptionAttribute)} not found.", nameof(enumValue));
-            }
-
-            return attribute.Description;
-        }
-
         public static T FromName<T>(string name)
             where T : Enum
         {
@@ -38,6 +25,19 @@ namespace NevesCS.Static.Utils
             }
 
             return success;
+        }
+
+        public static string GetDescription<T>(T enumValue)
+            where T : Enum
+        {
+            var field = enumValue.GetType().GetField(enumValue.ToString());
+
+            if (field is null || Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is not DescriptionAttribute attribute)
+            {
+                throw new ArgumentException($"{nameof(DescriptionAttribute)} not found.", nameof(enumValue));
+            }
+
+            return attribute.Description;
         }
 
         public static T FromDescription<T>(string description, bool checkFieldName = true)
