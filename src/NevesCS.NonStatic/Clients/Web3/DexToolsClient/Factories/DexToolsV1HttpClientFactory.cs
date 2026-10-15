@@ -5,7 +5,7 @@ using NevesCS.Static.Utils;
 
 namespace NevesCS.NonStatic.Clients.Web3.DexToolsClient.Factories
 {
-    public sealed class DexToolsV1HttpClientCachedFactory(
+    public sealed class DexToolsV1HttpClientFactory(
         IHttpClientFactory httpClientFactory,
         IThreadRateLimiter? rateLimiter)
 
@@ -15,7 +15,7 @@ namespace NevesCS.NonStatic.Clients.Web3.DexToolsClient.Factories
 
         private readonly IHttpClientFactory HttpClientFactory = ObjectUtils.ThrowIfNull(httpClientFactory, nameof(httpClientFactory));
 
-        public DexToolsV1HttpClientCachedFactory(IHttpClientFactory httpClientFactory)
+        public DexToolsV1HttpClientFactory(IHttpClientFactory httpClientFactory)
             : this(httpClientFactory, null)
         {
         }
