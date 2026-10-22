@@ -95,10 +95,7 @@ public sealed class Debouncer<TInAction> : IDebouncer<TInAction>, IDisposable
 
     private void ThrowIfDisposed()
     {
-        if (_disposed)
-        {
-            throw new ObjectDisposedException(nameof(Debouncer<TInAction>));
-        }
+        ObjectDisposedException.ThrowIf(_disposed, nameof(Debouncer<TInAction>));
     }
 
     private void ThrowIfNotInitialized()

@@ -112,10 +112,7 @@ public sealed class BatchAccumulator<T> : IBatchAccumulator<T>
 
     private void ThrowIfDisposed()
     {
-        if (_disposed)
-        {
-            throw new ObjectDisposedException(nameof(Debouncer<T>));
-        }
+        ObjectDisposedException.ThrowIf(_disposed, nameof(BatchAccumulator<T>));
     }
 
     private void ThrowIfNotInitialized()
